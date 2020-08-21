@@ -9,11 +9,14 @@ public class Block
     private bool isTransparent;
     private GameObject objVar;
 
+    private bool isLiquid;
 
-    public Block(bool isTransparent, GameObject objVar)
+
+    public Block(bool isTransparent, GameObject objVar, bool isLiquid)
     {
         setTransparent(isTransparent);
         setGameObject(objVar);
+        setIsLiquid(isLiquid);
         UnityEngine.Debug.Log("Created New Block Object.... IS TRANSPARENT: " + getIsTransparent() + " HAS GAME OBEJECT: " + getHasGameObject());
     }
 
@@ -31,17 +34,25 @@ public class Block
         UnityEngine.Debug.Log("Created New Block Object.... IS TRANSPARENT: " + getIsTransparent() + " HAS GAME OBEJECT: " + getHasGameObject());
     }
 
+
     public void setTransparent(bool isTransparent)
     {
         this.isTransparent = isTransparent;
     }
 
     public void setGameObject(GameObject objVar)
-    {   
-        
+    {
         this.objVar = objVar;
-       
-        
+    }
+
+    public void setIsLiquid(bool isLiquid)
+    {
+        this.isLiquid = isLiquid;
+    }
+
+    public bool getIsLiquid()
+    {
+        return isLiquid;
     }
 
     public bool getIsTransparent()

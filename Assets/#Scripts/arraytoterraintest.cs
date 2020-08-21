@@ -8,12 +8,14 @@ public class arraytoterraintest : MonoBehaviour
 {
 
     public GameObject player;
-    
     public static Block DIRT;
     public static Block GRASS;
+    public static Block SNOW_GRASS;
     public static Block WOOD;
     public static Block LEAF;
     public static Block AIR;
+    public static Block WATER_FULL;
+    //public static Block WATER_TOP;
 
     public String currentCenterChunk;
 
@@ -31,50 +33,19 @@ public class arraytoterraintest : MonoBehaviour
         // SET BLOCKS
         DIRT = new Block(Resources.Load<GameObject>("prefabs/testDirt"));
         GRASS  = new Block(Resources.Load<GameObject>("prefabs/Grass"));
+        SNOW_GRASS  = new Block(Resources.Load<GameObject>("prefabs/SnowGrass"));
         AIR = new Block(true);
+        WATER_FULL = new Block(true, Resources.Load<GameObject>("prefabs/waterFull"), true);
+        //WATER_TOP = new Block(true, Resources.Load<GameObject>("prefabs/waterTop"), true);
 
          int currentXCoord = (int) player.transform.position.x;
         int currentZCoord = (int) player.transform.position.z;
         
         string[] chunkIDData = getChunkID(currentXCoord, currentZCoord);
 
-
-        
-        // string xchunk = chunkIDData[1];
-        // string zchunk = chunkIDData[2];
         string startChunk = chunkIDData[0];
 
-        Chunk.chunksToLoad.Enqueue(startChunk);
-        // currentCenterChunk = startChunk;
-
-        // StartCoroutine(renderRadius(xchunk,zchunk, RENDERDISTANCE));
-
-        
-
-        // DEBUG STUFF:
-
-        //DEBUG RENDER RADIUS 
-        //renderRadius(0, 0, 4);
-
-
-
-        // DEBUG ONE SPECIFIC CHUNK
-        // int currentXCoord = -100;
-        // int currentZCoord = 48;
-        
-        // string[] chunkIDData = getChunkID(currentXCoord, currentZCoord);
-
-
-        
-        // string xchunk = chunkIDData[1];
-        // string zchunk = chunkIDData[2];
-
-        // string startChunk = chunkIDData[0];
-
-        // StartCoroutine(Chunk.loadChunk(startChunk));
-        
-
-
+        Chunk.chunksToLoad.Enqueue(startChunk); // Render the chunk directly below the player first
     }
 
     // Update is called once per frame
@@ -107,11 +78,8 @@ public class arraytoterraintest : MonoBehaviour
         int XStart = XZRange[1];
         int ZStart = XZRange[0];
 
-
-
         int XEnd = XZRange[3];
         int ZEnd = XZRange[2];
-
         
         int XS = XStart;
         int chunkZPOSITIVE = int.Parse(insureSixDigits(chunkID).Substring(0, 1));
@@ -135,24 +103,39 @@ public class arraytoterraintest : MonoBehaviour
                 for (int z = 0; z < 16; z++)
                 {
 
-                    // Noise map effect range of y + 50 - 150
-                    float yTop = (arraytoterraintest.noiseMap[XS + 1600, ZS + 1600] * 75) + 75;
-                    ////UnityEngine.Debug.Log(yTop);
+                    // Noise map effect range of y: 35 - 150
+                    float yTop = (arraytoterraintest.noiseMap[XS + 1600, ZS + 1600] * 115) + 35;
                     int ytopInt = (int) Math.Floor(yTop);
-                    ////UnityEngine.Debug.Log(ytopInt);
-                    tempChumk[ytopInt, x, z] = GRASS;
-                    
-                    //tempBlock.getGameObject().transform.position = new Vector3(XS,ytopInt , ZS);
-                    //Anything Higher as air
-                    for(int y = ytopInt + 1; y < 255; y++){
-                        tempChumk[y, x, z] = AIR;
+
+                    if(ytopInt < 70){
+                        tempChumk[ytopInt, x, z] = DIRT;
+                    }else if(ytopInt > 100)
+                    {
+                        tempChumk[ytopInt, x, z] = SNOW_GRASS;
                     }
+                    else{
+                        tempChumk[ytopInt, x, z] = GRASS;
+                    }
+                    
+                    if(ytopInt < 70){
+                        //anything higher until 70 is water
+                        for(int y = ytopInt + 1; y <= 70; y++){
+                            tempChumk[y, x, z] = WATER_FULL;
+                        }
+                        // Anything higher than 70 is air
+                        for(int y = 71; y < 255; y++){
+                            tempChumk[y, x, z] = AIR;
+                        }
+                    }else{
+                        for(int y = ytopInt + 1; y < 255; y++){
+                            tempChumk[y, x, z] = AIR;
+                        }
+                    }
+                    
                     //Anything Below Dirt
                     for(int y = ytopInt - 1; y >= 0; y--){
                         tempChumk[y, x, z] = DIRT;
                     }
-
-                    //UnityEngine.Debug.Log("Generating Block. ChunkID: " + chunkID + " World X: " + XS + "  World Z: " + ZS + "  X Range: " + XStart + "-" + XEnd + "  ZRange: " + ZStart + "-" + ZEnd);
                     ZS++;
                 }
                 XS++;
