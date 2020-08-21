@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 
 public class Block
 {
@@ -9,20 +9,26 @@ public class Block
     private bool isTransparent;
     private GameObject objVar;
 
+
     public Block(bool isTransparent, GameObject objVar)
     {
         setTransparent(isTransparent);
         setGameObject(objVar);
+        UnityEngine.Debug.Log("Created New Block Object.... IS TRANSPARENT: " + getIsTransparent() + " HAS GAME OBEJECT: " + getHasGameObject());
     }
 
     public Block(GameObject objVar)
     {
         setGameObject(objVar);
+        setTransparent(false);
+        UnityEngine.Debug.Log("Created New Block Object.... IS TRANSPARENT: " + getIsTransparent() + " HAS GAME OBEJECT: " + getHasGameObject());
     }
 
     public Block(bool isTransparent)
     {
         setTransparent(isTransparent);
+        setGameObject(null);
+        UnityEngine.Debug.Log("Created New Block Object.... IS TRANSPARENT: " + getIsTransparent() + " HAS GAME OBEJECT: " + getHasGameObject());
     }
 
     public void setTransparent(bool isTransparent)
@@ -31,8 +37,11 @@ public class Block
     }
 
     public void setGameObject(GameObject objVar)
-    {
+    {   
+        
         this.objVar = objVar;
+       
+        
     }
 
     public bool getIsTransparent()

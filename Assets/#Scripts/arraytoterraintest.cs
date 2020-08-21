@@ -7,14 +7,19 @@ using System.Diagnostics;
 public class arraytoterraintest : MonoBehaviour
 {
 
-
-    public GameObject dirtPrefab;
-    public GameObject grassPrefab;
-    public GameObject woodPrefab;
-    public GameObject leafPrefab;
     public GameObject player;
+    
+    public static Block DIRT;
+    public static Block GRASS;
+    public static Block WOOD;
+    public static Block LEAF;
+    public static Block AIR;
 
     public String currentCenterChunk;
+
+    public static float[,] noiseMap = Noise.GenerateNoiseMap(3200, 3200, 87, 75, 2, .1f, 1.0f, new Vector2(0,0));
+
+    const int RENDERDISTANCE = 6;
 
     // Set GO Objectsdd
 
@@ -23,98 +28,49 @@ public class arraytoterraintest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Block DIRT = new Block(dirtPrefab);
-        Block GRASS = new Block(grassPrefab);
-        Block WOOD = new Block(woodPrefab);
-        Block LEAF = new Block(true, leafPrefab);
-        Block AIR = new Block(true);
-        // Make butterfly array
+        // SET BLOCKS
+        DIRT = new Block(Resources.Load<GameObject>("prefabs/testDirt"));
+        GRASS  = new Block(Resources.Load<GameObject>("prefabs/Grass"));
+        AIR = new Block(true);
 
-        Block[, ,] testChunk = new Block[255, 16, 16];
-
-        for (int y = 0; y < 255; y++)
-        {
-            for (int i = 0; i < 16; i++)
-            {
-                for (int j = 0; j < 16; j++)
-                {
-
-                    // When placing block, we much add .5 to each axis
-
-                    // Creating a 3d array to hold a single chunk
-                    // block maps;
-                    // 0 = air
-                    // 1 = dirt
-                    // 2 = grass
-                    // 3 = wood
-                    // 4 = leaf
-
-                    if(y < 56)
-                    {
-                        testChunk[y, i, j] = DIRT;
-                    }
-
-                    else if(y == 56)
-                    {
-                        testChunk[y, i, j] = GRASS;
-                    }
-
-                    else
-                    {
-                        testChunk[y, i, j] = AIR;
-                    }
-                }
-            }
-            
-        }
-
-        //Manual Blocks
-
-        testChunk[57, 5, 7] = WOOD;
-        testChunk[58, 5, 7] = WOOD;
-        testChunk[59, 5, 7] = WOOD;
+        int currentXCoord = (int) player.transform.position.x;
+        int currentZCoord = (int) player.transform.position.z;
         
-        testChunk[60, 5, 7] = LEAF;
-        testChunk[60, 5, 8] = LEAF;
-        testChunk[60, 5, 6] = LEAF;
-        testChunk[60, 4, 7] = LEAF;
-        testChunk[60, 4, 8] = LEAF;
-        testChunk[60, 4, 6] = LEAF;
-        testChunk[60, 6, 7] = LEAF;
-        testChunk[60, 6, 8] = LEAF;
-        testChunk[60, 6, 6] = LEAF;
-
-        testChunk[61, 5, 7] = LEAF;
-        testChunk[61, 5, 8] = LEAF;
-        testChunk[61, 5, 6] = LEAF;
-        testChunk[61, 4, 7] = LEAF;
-        testChunk[61, 6, 7] = LEAF;
+        string[] chunkIDData = getChunkID(currentXCoord, currentZCoord);
 
 
-        testChunk[62, 5, 7] = LEAF;
+        
+        string xchunk = chunkIDData[1];
+        string zchunk = chunkIDData[2];
+        string startChunk = chunkIDData[0];
+        currentCenterChunk = startChunk;
 
-        testChunk[56, 5, 5] = AIR;
-        testChunk[56, 5, 4] = AIR;
-        testChunk[55, 5, 4] = AIR;
-        testChunk[55, 5, 5] = AIR;
-        testChunk[54, 5, 5] = AIR;
-        testChunk[53, 5, 5] = AIR;
-        testChunk[53, 5, 5] = AIR;
+        StartCoroutine(renderRadius(xchunk,zchunk, RENDERDISTANCE));
 
+        
 
+        // DEBUG STUFF:
 
-        // Set all the chunks as testChunk
-        for(int i = 0; i < 999999; i++)
-        {
-            Chunk.setChunk(i, testChunk);
-
-        }
-
-
-
+        //DEBUG RENDER RADIUS 
         //renderRadius(0, 0, 4);
 
 
+
+        // DEBUG ONE SPECIFIC CHUNK
+        // int currentXCoord = -100;
+        // int currentZCoord = 48;
+        
+        // string[] chunkIDData = getChunkID(currentXCoord, currentZCoord);
+
+
+        
+        // string xchunk = chunkIDData[1];
+        // string zchunk = chunkIDData[2];
+
+        // string startChunk = chunkIDData[0];
+
+        // StartCoroutine(Chunk.loadChunk(startChunk));
+        
 
 
     }
@@ -124,9 +80,89 @@ public class arraytoterraintest : MonoBehaviour
     {
         int currentXCoord = (int) player.transform.position.x;
         int currentZCoord = (int) player.transform.position.z;
+        
+        string[] chunkIDData = getChunkID(currentXCoord, currentZCoord);
+
+
+        
+        string xchunk = chunkIDData[1];
+        string zchunk = chunkIDData[2];
+
+        string startChunk = chunkIDData[0];
+        if(startChunk != currentCenterChunk){
+            currentCenterChunk = startChunk;
+            StartCoroutine(renderRadius(xchunk,zchunk, RENDERDISTANCE));
+        }
+        
+    }
+
+    public static IEnumerator generateChunkData(int chunkID){
+        //UnityEngine.Debug.Log("Generating Chunk Data for:" + chunkID);
+        
+        int[] XZRange = Chunk.getCoordRange(insureSixDigits(chunkID));
+        int XStart = XZRange[1];
+        int ZStart = XZRange[0];
+
+
+
+        int XEnd = XZRange[3];
+        int ZEnd = XZRange[2];
+
+        
+        int XS = XStart;
+        int chunkZPOSITIVE = int.Parse(insureSixDigits(chunkID).Substring(0, 1));
+        int chunkXPOSITIVE = int.Parse(insureSixDigits(chunkID).Substring(3, 1));
+
+            // Create a chunk
+            Block[,,] tempChumk = new Block[255, 16, 16];
+            if(chunkXPOSITIVE == 0 && XS > 0)
+            {
+                XS = XEnd * (-1);
+            }
+
+            for (int x = 0; x < 16; x++)
+            {
+                int ZS = ZStart;
+                if(chunkZPOSITIVE == 0 && ZS > 0)
+                {
+                    ZS = ZEnd * (-1);
+                }
+
+                for (int z = 0; z < 16; z++)
+                {
+
+                    // Noise map effect range of y + 50 - 150
+                    float yTop = (arraytoterraintest.noiseMap[XS + 1600, ZS + 1600] * 75) + 75;
+                    ////UnityEngine.Debug.Log(yTop);
+                    int ytopInt = (int) Math.Floor(yTop);
+                    ////UnityEngine.Debug.Log(ytopInt);
+                    tempChumk[ytopInt, x, z] = GRASS;
+                    
+                    //tempBlock.getGameObject().transform.position = new Vector3(XS,ytopInt , ZS);
+                    //Anything Higher as air
+                    for(int y = ytopInt + 1; y < 255; y++){
+                        tempChumk[y, x, z] = AIR;
+                    }
+                    //Anything Below Dirt
+                    for(int y = ytopInt - 1; y >= 0; y--){
+                        tempChumk[y, x, z] = DIRT;
+                    }
+
+                    //UnityEngine.Debug.Log("Generating Block. ChunkID: " + chunkID + " World X: " + XS + "  World Z: " + ZS + "  X Range: " + XStart + "-" + XEnd + "  ZRange: " + ZStart + "-" + ZEnd);
+                    ZS++;
+                }
+                XS++;
+            }
+            Chunk.setChunk(chunkID, tempChumk);
+            yield break;
+    }
+
+    private string[] getChunkID(int x, int z){
+        int currentXCoord = x;
+        int currentZCoord = z;
         //UnityEngine.Debug.Log((int) currentXCoord);
         //UnityEngine.Debug.Log((int) currentZCoord);
-         string xchunk = "000";
+        string xchunk = "000";
         string zchunk = "000";
         int xchunkI = 0;
         int zchunkI = 0;
@@ -174,14 +210,16 @@ public class arraytoterraintest : MonoBehaviour
         zchunk = insureTripleDigit(zchunkI);
 
         string startChunk = zchunk + xchunk;
-        if(startChunk != currentCenterChunk){
-            currentCenterChunk = startChunk;
-            StartCoroutine(renderRadius(xchunk,zchunk, 4));
-        }
+
+        string[] returnString = new string[3];
+
+        returnString[0] = startChunk;
+        returnString[1] = xchunk;
+        returnString[2] = zchunk;
+
+        return returnString;
         
     }
-
-   
 
     IEnumerator renderRadius(string xchunk, string zchunk, int radius)
     {
@@ -209,7 +247,7 @@ public class arraytoterraintest : MonoBehaviour
 
         // Make an array of chunks we want rendered.
 
-        string[] chunksWeWantRendered = new string[1024]; // 32 * 32 render distance max
+        string[] chunksWeWantRendered = new string[(radius * 2) * (radius * 2)]; // 32 * 32 render distance max
         string[] chunksWeWantUnrendered = new string[1024];
         int counter = 0;
         for(string xAxis = firstChunkXAxisToRender; xAxis != lastChunkXAxisToRender; xAxis = decrementChunk(xAxis)){
@@ -219,13 +257,31 @@ public class arraytoterraintest : MonoBehaviour
             }
         }
 
-        // Render those chunks
+        //UnityEngine.Debug.Log(counter);
 
-        for(int j = 0; j < counter; j++){
-            yield return Chunk.loadChunk(chunksWeWantRendered[j]);
-        }
         string[] loadedChunkList = new string[Chunk.loadedChunkList.Count];
         Chunk.loadedChunkList.CopyTo(loadedChunkList);
+
+        // Render those chunks
+
+        foreach(string chunk in chunksWeWantRendered){
+            bool match = false;
+            foreach(string wantedChunk in loadedChunkList){
+                if (wantedChunk == chunk){
+                    match = true;
+                }
+            }
+            if(!match){
+                //UnityEngine.Debug.Log("Rendering Chunk" + chunk);
+                yield return Chunk.loadChunk(chunk);
+            }          
+        }
+        // for(int j = 0; j < counter; j++){
+            
+        //     yield return Chunk.loadChunk(chunksWeWantRendered[j]);
+        //     //generateChunkData(int.Parse(chunksWeWantRendered[j]));
+        // }
+        
 
         foreach(string chunk in loadedChunkList){
             bool matchFound = false;
@@ -235,7 +291,7 @@ public class arraytoterraintest : MonoBehaviour
                 }
             }
             if(!matchFound){
-                UnityEngine.Debug.Log("UNLOADING CHUNK!");
+                //UnityEngine.Debug.Log("UNLOADING CHUNK!");
                 yield return Chunk.unloadChunk(chunk);
             }
         }
@@ -246,7 +302,7 @@ public class arraytoterraintest : MonoBehaviour
         yield break;
     }
 
-    public string insureTripleDigit(int num)
+    public static string insureTripleDigit(int num)
     {
         if(num < 10)
         {
@@ -260,7 +316,27 @@ public class arraytoterraintest : MonoBehaviour
         return num.ToString();
     }
 
-    private string decrementChunk(string chunk){
+    public static string insureSixDigits(int num){
+        if(num < 10){
+            return "00000" + num;
+        }
+        if(num < 100){
+            return "0000" + num;
+        }
+        if(num < 1000){
+            return "000" + num;
+        }
+        if(num < 10000){
+            return "00" + num;
+        }
+        if(num < 100000){
+            return "0" + num;
+        }
+        return num.ToString();
+
+    }
+
+    public static string decrementChunk(string chunk){
 
         string chunkF = insureTripleDigit(int.Parse(chunk));
 
@@ -291,7 +367,7 @@ public class arraytoterraintest : MonoBehaviour
     }
 
 
-    private string incrementChunk(string chunk){
+    public static string incrementChunk(string chunk){
         string chunkF = insureTripleDigit(int.Parse(chunk));
 
         int cPOSITIVE = int.Parse(chunkF.Substring(0, 1));

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Chunk : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class Chunk : MonoBehaviour
         return chunks[int.Parse(chunkID)];
     }
 
-    public static void setChunk(int chunkID, object chunkData)
+    public static void setChunk(int chunkID, Block[,,] chunkData)
     {
         chunks[chunkID] = chunkData;
     }
@@ -29,10 +30,28 @@ public class Chunk : MonoBehaviour
 
     public static IEnumerator loadChunk(string chunkID)
     {
-        if(getChunk(chunkID) == null)
-        {
+        if(int.Parse(chunkID) > 999999 || int.Parse(chunkID) < 0){
             yield break;
         }
+        if(getChunk(chunkID) == null){
+            yield return arraytoterraintest.generateChunkData(int.Parse(chunkID));
+        }
+        //Make Sure Surrounding Chunks Have Loaded Data
+        string zChunk = chunkID.Substring(0, 3);
+        string xchunk = chunkID.Substring(3, 3);
+        if(getChunk(arraytoterraintest.incrementChunk(zChunk) + xchunk) == null){
+            yield return arraytoterraintest.generateChunkData(int.Parse(arraytoterraintest.incrementChunk(zChunk) + xchunk));
+        }
+        if(getChunk(arraytoterraintest.decrementChunk(zChunk) + xchunk) == null){
+            yield return arraytoterraintest.generateChunkData(int.Parse(arraytoterraintest.decrementChunk(zChunk) + xchunk));
+        }
+        if(getChunk(zChunk + arraytoterraintest.incrementChunk(xchunk)) == null){
+            yield return arraytoterraintest.generateChunkData(int.Parse(zChunk + arraytoterraintest.incrementChunk(xchunk)));
+        }
+        if(getChunk(zChunk + arraytoterraintest.decrementChunk(xchunk)) == null){
+            yield return arraytoterraintest.generateChunkData(int.Parse(zChunk + arraytoterraintest.decrementChunk(xchunk)));
+        }
+
         if (isLoaded(chunkID)) // Don't double load the same chunk, punk!
         {
             //UnityEngine.Debug.Log("Not Rendering chunk " + chunkID + " beacause it is already loaded...");
@@ -46,6 +65,8 @@ public class Chunk : MonoBehaviour
         // 100 100
         // ^+- ^+-
 
+
+        
 
         // Step one: Get XZ Range from chunkID
         int[] XZRange = new int[4];
@@ -63,8 +84,8 @@ public class Chunk : MonoBehaviour
         int XEnd = XZRange[3];
         int ZEnd = XZRange[2];
 
-        //Bad way of converting object to array lmao
-        Block[,,] chunkBuffer = (Block[,,])chunks[int.Parse(chunkID)];
+        // //Bad way of converting object to array lmao
+        Block[,,] chunkBuffer = (Block[,,]) getChunk(chunkID);
 
         GameObject[,,] loadedGameObjects = new GameObject[255,16,16];
 
@@ -86,13 +107,17 @@ public class Chunk : MonoBehaviour
 
                 for (int z = 0; z < 16; z++)
                 {
-
+                    if(XS == 9 && ZS == 47 && y == 116){
+                        UnityEngine.Debug.Log("BLOCK: " + XS + ", " + y + ", " + ZS + " SHOULD RENDER: " + blockShouldRender(y, x, z, chunkID, chunkBuffer) + " HAS OBJECT: " + chunkBuffer[y, x, z].getHasGameObject());
+                    }
                     if(blockShouldRender(y, x, z, chunkID, chunkBuffer))
-                    {
-                        //UnityEngine.Debug.Log("Checking Coord: y:" + y + " x: " + x + " z: " + z + "isTransparent?:" + chunkBuffer[y, x, z].getIsTransparent());
+                    {                
+
                         if(chunkBuffer[y, x, z].getHasGameObject())
                         {
+                            //UnityEngine.Debug.Log("Checking Coord: y:" + y + " x: " + x + " z: " + z + "isTransparent?:" + chunkBuffer[y, x, z].getIsTransparent());
                             loadedGameObjects[y,x,z] = Instantiate(chunkBuffer[y, x, z].getGameObject(), new Vector3(XS, y, ZS), Quaternion.identity);
+                            //chunkBuffer[y, x, z].getGameObject().transform.position = new Vector3(y, x, z);
                         }
                         
                     }
@@ -102,12 +127,15 @@ public class Chunk : MonoBehaviour
             }
         }
 
+        //// getChunk(chunkID); //TODO: WHAT DOES THIS DO? AT WHAT POINT OF INSANITY DID I ADD THIS?
+
         loadedChunks[int.Parse(chunkID)] = true;
         gameObjects[int.Parse(chunkID)] = loadedGameObjects;
         loadedChunkList.Add(chunkID);
         yield break;
 
     }
+
 
     public static IEnumerator unloadChunk(string chunkID)
     {
@@ -116,7 +144,7 @@ public class Chunk : MonoBehaviour
         }
         if (!isLoaded(chunkID)) // Don't double load the same chunk, punk!
         {
-            UnityEngine.Debug.Log("Not unloading chunk " + chunkID + " beacause it is already unloaded...");
+            //UnityEngine.Debug.Log("Not unloading chunk " + chunkID + " beacause it is already unloaded...");
             yield break;
         }
 
@@ -146,9 +174,9 @@ public class Chunk : MonoBehaviour
         yield break;
     }
 
+    
 
-
-    private static int[] getCoordRange(string chunkID)
+    public static int[] getCoordRange(string chunkID)
     {
 
         int chunkZ = int.Parse(chunkID.Substring(1, 2));
@@ -231,6 +259,8 @@ public class Chunk : MonoBehaviour
 
     private static bool blockShouldRender(int y, int x, int z, string chunkID, Block[,,] chunkBuffer)
     {
+
+        //return true; //TODO: REMOVE THIS WHEN PROBLEM FIXWD
         int chunkZ = int.Parse(chunkID.Substring(1, 2));
         int chunkX = int.Parse(chunkID.Substring(4, 2));
 
@@ -293,8 +323,10 @@ public class Chunk : MonoBehaviour
             int tempChunkI = int.Parse(tempChunk);
 
 
-
-            Block[,,] tempChunkArr = (Block[,,])chunks[tempChunkI];
+            // if(getChunk(tempChunkI.ToString()) == null){
+            //     arraytoterraintest.generateChunkData(tempChunkI);
+            // }
+            Block[,,] tempChunkArr = (Block[,,])getChunk(tempChunkI.ToString());
 
 
             //if (tempChunkArr == null || isTransparent(tempChunkArr[y, 15, z])) { doRender = true; }
@@ -352,8 +384,10 @@ public class Chunk : MonoBehaviour
             //UnityEngine.Debug.Log("x is  15: " + tempChunk);
             int tempChunkI = int.Parse(tempChunk);
 
-
-            Block[,,] tempChunkArr = (Block[,,])chunks[tempChunkI];
+            // if(getChunk(tempChunkI.ToString()) == null){
+            //     arraytoterraintest.generateChunkData(tempChunkI).ToString();
+            // }
+            Block[,,] tempChunkArr = (Block[,,])getChunk(tempChunkI.ToString());
 
 
 
@@ -411,8 +445,10 @@ public class Chunk : MonoBehaviour
             int tempChunkI = int.Parse(tempChunk);
 
 
-
-            Block[,,] tempChunkArr = (Block[,,])chunks[tempChunkI];
+            // if(getChunk(tempChunkI.ToString()) == null){
+            //     arraytoterraintest.generateChunkData(tempChunkI).ToString();
+            // }
+            Block[,,] tempChunkArr = (Block[,,])getChunk(tempChunkI.ToString());
             //if (tempChunkArr == null || isTransparent(tempChunkArr[y, x, 15])) { doRender = true; }
             if (tempChunkArr != null) { if (tempChunkArr[y, x, 15].getIsTransparent()) { doRender = true; } }
         }
@@ -464,8 +500,10 @@ public class Chunk : MonoBehaviour
             //UnityEngine.Debug.Log("z is  15: " + tempChunk);
             int tempChunkI = int.Parse(tempChunk);
 
-
-            Block[,,] tempChunkArr = (Block[,,])chunks[tempChunkI];
+            // if(getChunk(tempChunkI.ToString()) == null){
+            //     arraytoterraintest.generateChunkData(tempChunkI).ToString();
+            // }
+            Block[,,] tempChunkArr = (Block[,,])getChunk(tempChunkI.ToString());
 
             //if (tempChunkArr == null || isTransparent(tempChunkArr[y, x, 0])) { doRender = true; }
             if (tempChunkArr != null) { if (tempChunkArr[y, x, 0].getIsTransparent()) { doRender = true; } }
@@ -479,12 +517,19 @@ public class Chunk : MonoBehaviour
             if (chunkBuffer[y + 1, x, z].getIsTransparent() || chunkBuffer[y - 1, x, z].getIsTransparent()) { doRender = true; }
         }
 
-        if (x > 0 && x < 15 && z > 0 && z < 15)
+        if (x > 0)
         {
-            if (chunkBuffer[y, x + 1, z].getIsTransparent()) { doRender = true; }
             if (chunkBuffer[y, x - 1, z].getIsTransparent()) { doRender = true; }
-            if (chunkBuffer[y, x, z + 1].getIsTransparent()) { doRender = true; }
+            
+        }
+        if(x < 15){
+            if (chunkBuffer[y, x + 1, z].getIsTransparent()) { doRender = true; }
+        }
+        if(z > 0){
             if (chunkBuffer[y, x, z - 1].getIsTransparent()) { doRender = true; }
+        }
+        if(z < 15){
+            if (chunkBuffer[y, x, z + 1].getIsTransparent()) { doRender = true; }
         }
 
         return doRender;

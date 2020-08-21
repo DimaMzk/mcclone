@@ -36,11 +36,13 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\#Scripts\Noise.cs" />
      <Compile Include="Assets\FirstPersion AIO Pack\FirstPersonAIO\FirstPersonAIO.cs" />
      <Compile Include="Assets\#Scripts\arraytoterraintest.cs" />
      <Compile Include="Assets\#Scripts\Chunk.cs" />
      <Compile Include="Assets\#Scripts\Block.cs" />
      <Compile Include="Assets\#Scripts\IsVisible.cs" />
+     <Compile Include="Assets\#Scripts\Prefab.cs" />
      <None Include="Assets\FirstPersion AIO Pack\README.txt" />
     <Reference Include="UnityEngine">
         <HintPath>C:/Program Files/Unity/Hub/Editor/2020.1.0f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
