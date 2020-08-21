@@ -13,6 +13,8 @@ public class Chunk : MonoBehaviour
 
     static object[] gameObjects = new object[999999]; // Loaded Gameobejcts to Destroy upon unload
 
+    private static bool load_chunk_is_running = false;
+
     public static object getChunk(string chunkID)
     {
         return chunks[int.Parse(chunkID)];
@@ -30,7 +32,10 @@ public class Chunk : MonoBehaviour
 
     public static IEnumerator loadChunk(string chunkID)
     {
+        if(load_chunk_is_running){yield break;}
+        load_chunk_is_running = true;
         if(int.Parse(chunkID) > 999999 || int.Parse(chunkID) < 0){
+            load_chunk_is_running = false;
             yield break;
         }
         if(getChunk(chunkID) == null){
@@ -55,6 +60,7 @@ public class Chunk : MonoBehaviour
         if (isLoaded(chunkID)) // Don't double load the same chunk, punk!
         {
             //UnityEngine.Debug.Log("Not Rendering chunk " + chunkID + " beacause it is already loaded...");
+            load_chunk_is_running = false;
             yield break;
         }
         
@@ -132,6 +138,7 @@ public class Chunk : MonoBehaviour
         loadedChunks[int.Parse(chunkID)] = true;
         gameObjects[int.Parse(chunkID)] = loadedGameObjects;
         loadedChunkList.Add(chunkID);
+        load_chunk_is_running = false;
         yield break;
 
     }

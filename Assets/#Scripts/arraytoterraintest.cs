@@ -33,19 +33,19 @@ public class arraytoterraintest : MonoBehaviour
         GRASS  = new Block(Resources.Load<GameObject>("prefabs/Grass"));
         AIR = new Block(true);
 
-        int currentXCoord = (int) player.transform.position.x;
-        int currentZCoord = (int) player.transform.position.z;
+        // int currentXCoord = (int) player.transform.position.x;
+        // int currentZCoord = (int) player.transform.position.z;
         
-        string[] chunkIDData = getChunkID(currentXCoord, currentZCoord);
+        // string[] chunkIDData = getChunkID(currentXCoord, currentZCoord);
 
 
         
-        string xchunk = chunkIDData[1];
-        string zchunk = chunkIDData[2];
-        string startChunk = chunkIDData[0];
-        currentCenterChunk = startChunk;
+        // string xchunk = chunkIDData[1];
+        // string zchunk = chunkIDData[2];
+        // string startChunk = chunkIDData[0];
+        // currentCenterChunk = startChunk;
 
-        StartCoroutine(renderRadius(xchunk,zchunk, RENDERDISTANCE));
+        // StartCoroutine(renderRadius(xchunk,zchunk, RENDERDISTANCE));
 
         
 
@@ -223,7 +223,6 @@ public class arraytoterraintest : MonoBehaviour
 
     IEnumerator renderRadius(string xchunk, string zchunk, int radius)
     {
-
 
        
 
