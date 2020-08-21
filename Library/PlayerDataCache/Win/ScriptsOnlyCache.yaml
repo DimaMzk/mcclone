@@ -49,13 +49,13 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 12214}
+      Script: {instanceID: 12212}
     - Class: 114
-      Script: {instanceID: 12494}
+      Script: {instanceID: 12492}
     - Class: 114
-      Script: {instanceID: 12620}
+      Script: {instanceID: 12618}
     - Class: 114
-      Script: {instanceID: 13088}
+      Script: {instanceID: 13086}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 124
@@ -632,4 +632,4 @@ ScriptsOnlyBuild:
   platform: 5
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/DMaiz/Unity Builds/Minecraft Clone/0.4.3/Minecraft Clone.exe
+  playerPath: C:/Users/DMaiz/Unity Builds/Minecraft Clone/0.4.4/Minecraft Clone.exe

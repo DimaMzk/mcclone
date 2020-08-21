@@ -43,6 +43,7 @@
      <Compile Include="Assets\#Scripts\Chunk.cs" />
      <Compile Include="Assets\#Scripts\Block.cs" />
      <Compile Include="Assets\#Scripts\IsVisible.cs" />
+     <Compile Include="Assets\#Scripts\FastNoise.cs" />
      <None Include="Assets\FirstPersion AIO Pack\README.txt" />
      <None Include="Assets\Painterly Terrain Textures\Read Me.txt" />
     <Reference Include="UnityEngine">

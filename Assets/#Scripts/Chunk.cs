@@ -493,7 +493,7 @@ public class Chunk : MonoBehaviour
         }
 
         if (y > 0 && y < 254)
-        {
+        {   
             if (chunkBuffer[y + 1, x, z].getIsTransparent() || chunkBuffer[y - 1, x, z].getIsTransparent()) { doRender = true; }
         }
         if (x > 0)
