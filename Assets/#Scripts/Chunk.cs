@@ -9,11 +9,14 @@ public class Chunk : MonoBehaviour
     static object[] chunks = new object[999999];
     static bool[] loadedChunks = new bool[999999]; // Hard limit of all the chunks can be loaded, thought i would not recomment it
 
+    public static Queue<string> chunksToLoad = new Queue<string>();
+
     public static List<string> loadedChunkList = new List<string>();
 
     static object[] gameObjects = new object[999999]; // Loaded Gameobejcts to Destroy upon unload
 
-    private static bool load_chunk_is_running = false;
+    private static int load_chunk_is_running = 0;
+    private const int MAX_CHUNK_LOADERS = 2;
 
     public static object getChunk(string chunkID)
     {
@@ -30,12 +33,17 @@ public class Chunk : MonoBehaviour
         return loadedChunks[int.Parse(chunkID)];
     }
 
-    public static IEnumerator loadChunk(string chunkID)
+    public static IEnumerator loadNextChunk()
     {
-        if(load_chunk_is_running){yield break;}
-        load_chunk_is_running = true;
+        if(load_chunk_is_running >= MAX_CHUNK_LOADERS){yield break;}
+        load_chunk_is_running++;
+        if(chunksToLoad.Count == 0){
+            load_chunk_is_running--;
+            yield break;
+        }
+        string chunkID = chunksToLoad.Dequeue();
         if(int.Parse(chunkID) > 999999 || int.Parse(chunkID) < 0){
-            load_chunk_is_running = false;
+            load_chunk_is_running--;
             yield break;
         }
         if(getChunk(chunkID) == null){
@@ -60,7 +68,7 @@ public class Chunk : MonoBehaviour
         if (isLoaded(chunkID)) // Don't double load the same chunk, punk!
         {
             //UnityEngine.Debug.Log("Not Rendering chunk " + chunkID + " beacause it is already loaded...");
-            load_chunk_is_running = false;
+            load_chunk_is_running--;
             yield break;
         }
         
@@ -138,7 +146,7 @@ public class Chunk : MonoBehaviour
         loadedChunks[int.Parse(chunkID)] = true;
         gameObjects[int.Parse(chunkID)] = loadedGameObjects;
         loadedChunkList.Add(chunkID);
-        load_chunk_is_running = false;
+        load_chunk_is_running--;
         yield break;
 
     }
@@ -267,7 +275,6 @@ public class Chunk : MonoBehaviour
     private static bool blockShouldRender(int y, int x, int z, string chunkID, Block[,,] chunkBuffer)
     {
 
-        //return true; //TODO: REMOVE THIS WHEN PROBLEM FIXWD
         int chunkZ = int.Parse(chunkID.Substring(1, 2));
         int chunkX = int.Parse(chunkID.Substring(4, 2));
 

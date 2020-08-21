@@ -49,13 +49,13 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 12490}
+      Script: {instanceID: 12216}
     - Class: 114
-      Script: {instanceID: 12616}
+      Script: {instanceID: 12496}
     - Class: 114
-      Script: {instanceID: 13084}
+      Script: {instanceID: 12622}
     - Class: 114
-      Script: {instanceID: 16712}
+      Script: {instanceID: 13090}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 124
@@ -245,6 +245,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Postprocessing.Runtime.dll
     namespaceName: UnityEngine.Rendering.PostProcessing
     className: Vignette
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: cubeUVMapping
   - hash:
       serializedVersion: 2
       Hash: bd3cf68c8964d3c66d1c43f4f98508c9
@@ -623,13 +629,7 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
-  - hash:
-      serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: cubeUVMapping
   platform: 5
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/DMaiz/Unity Builds/Minecraft Clone/0.4.1/Minecraft Clone.exe
+  playerPath: C:/Users/DMaiz/Unity Builds/Minecraft Clone/0.4.2/Minecraft Clone.exe

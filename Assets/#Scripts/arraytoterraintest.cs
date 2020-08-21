@@ -19,7 +19,7 @@ public class arraytoterraintest : MonoBehaviour
 
     public static float[,] noiseMap = Noise.GenerateNoiseMap(3200, 3200, 87, 75, 2, .1f, 1.0f, new Vector2(0,0));
 
-    const int RENDERDISTANCE = 6;
+    const int RENDERDISTANCE = 4;
 
     // Set GO Objectsdd
 
@@ -33,16 +33,18 @@ public class arraytoterraintest : MonoBehaviour
         GRASS  = new Block(Resources.Load<GameObject>("prefabs/Grass"));
         AIR = new Block(true);
 
-        // int currentXCoord = (int) player.transform.position.x;
-        // int currentZCoord = (int) player.transform.position.z;
+         int currentXCoord = (int) player.transform.position.x;
+        int currentZCoord = (int) player.transform.position.z;
         
-        // string[] chunkIDData = getChunkID(currentXCoord, currentZCoord);
+        string[] chunkIDData = getChunkID(currentXCoord, currentZCoord);
 
 
         
         // string xchunk = chunkIDData[1];
         // string zchunk = chunkIDData[2];
-        // string startChunk = chunkIDData[0];
+        string startChunk = chunkIDData[0];
+
+        Chunk.chunksToLoad.Enqueue(startChunk);
         // currentCenterChunk = startChunk;
 
         // StartCoroutine(renderRadius(xchunk,zchunk, RENDERDISTANCE));
@@ -93,6 +95,8 @@ public class arraytoterraintest : MonoBehaviour
             currentCenterChunk = startChunk;
             StartCoroutine(renderRadius(xchunk,zchunk, RENDERDISTANCE));
         }
+
+        StartCoroutine(Chunk.loadNextChunk());
         
     }
 
@@ -272,7 +276,11 @@ public class arraytoterraintest : MonoBehaviour
             }
             if(!match){
                 //UnityEngine.Debug.Log("Rendering Chunk" + chunk);
-                yield return Chunk.loadChunk(chunk);
+                //yield return Chunk.loadChunk(chunk);
+                if(!Chunk.chunksToLoad.Contains(chunk)){
+                    Chunk.chunksToLoad.Enqueue(chunk);
+                }
+                
             }          
         }
         // for(int j = 0; j < counter; j++){
