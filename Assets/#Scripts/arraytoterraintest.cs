@@ -8,31 +8,43 @@ public class arraytoterraintest : MonoBehaviour
 {
 
     public GameObject player;
+    
     public static Block DIRT;
     public static Block GRASS;
     public static Block SNOW_GRASS;
     public static Block WOOD;
     public static Block LEAF;
+    public static Block SNOW_LEAF;
     public static Block AIR;
     public static Block WATER_FULL;
     public static Block SAND;
+    public static Block GRASS18;
+    public static Block GRASS28;
+    public static Block GRASS38;
+    public static Block GRASS48;
+    public static Block GRASS58;
+    public static Block GRASS68;
+    public static Block GRASS78;
     //public static Block WATER_TOP;
 
     public String currentCenterChunk;
 
-    public static float[,] noiseMap = Noise.GenerateNoiseMap(3200, 3200, 850, 150, 2, .1f, 1.0f, new Vector2(0, 0));
+    private static System.Random SEED_GENERATOR = new System.Random();
+    public static int SEED = SEED_GENERATOR.Next(999999);
+
+    public static float[,] noiseMap = Noise.GenerateNoiseMap(3200, 3200, SEED, 150, 2, .1f, 1.0f, new Vector2(0, 0));
     //private static FastNoise fNoise = new FastNoise(6969);
 
-    private System.Random rand = new System.Random();
+    private System.Random rand = new System.Random(SEED);
 
     public static int[,] treeMap = new int[3200, 3200];
 
-    public static int[,] bushMap = new int[3200,3200];
+    public static int[,] bushMap = new int[3200, 3200];
 
 
 
 
-    const int RENDERDISTANCE = 4;
+    public int RENDERDISTANCE = 4;
 
     // Set GO Objectsdd
 
@@ -50,25 +62,39 @@ public class arraytoterraintest : MonoBehaviour
         SAND = new Block(Resources.Load<GameObject>("prefabs/Sand"));
         WOOD = new Block(Resources.Load<GameObject>("prefabs/wood"));
         LEAF = new Block(true, Resources.Load<GameObject>("prefabs/leaf"), false);
+        SNOW_LEAF = new Block(true, Resources.Load<GameObject>("prefabs/snow_leaf"), false);
+
+        //GRASS 1 / 8th BLOCKS 
+        GRASS18 = new Block(true, Resources.Load<GameObject>("prefabs/GRASS-1-8"), false, 0.0f, 0.0f, -.875f);
+        GRASS28 = new Block(true, Resources.Load<GameObject>("prefabs/GRASS-2-8"), false, 0.0f, 0.0f, -.75f);
+        GRASS38 = new Block(true, Resources.Load<GameObject>("prefabs/GRASS-3-8"), false, 0.0f, 0.0f, -.625f);
+        GRASS48 = new Block(true, Resources.Load<GameObject>("prefabs/GRASS-4-8"), false, 0.0f, 0.0f, -.5f);
+        GRASS58 = new Block(true, Resources.Load<GameObject>("prefabs/GRASS-5-8"), false, 0.0f, 0.0f, -.375f);
+        GRASS68 = new Block(true, Resources.Load<GameObject>("prefabs/GRASS-6-8"), false, 0.0f, 0.0f, -.25f);
+        GRASS78 = new Block(true, Resources.Load<GameObject>("prefabs/GRASS-7-8"), false, 0.0f, 0.0f, -.125f);
         //WATER_TOP = new Block(true, Resources.Load<GameObject>("prefabs/waterTop"), true);
 
 
-        
+
         for (int i = 0; i < 3200; i++)
         {
             for (int j = 0; j < 3200; j++)
             {
 
-                if(rand.Next(300) == 45){
+                if (rand.Next(300) == 45)
+                {
                     treeMap[i, j] = 1;
                 }
-                else{
+                else
+                {
                     treeMap[i, j] = 0;
                 }
-                if(rand.Next(500) == 45){
+                if (rand.Next(500) == 45)
+                {
                     bushMap[i, j] = 1;
                 }
-                else{
+                else
+                {
                     bushMap[i, j] = 0;
                 }
                 //treeMap[i, j] = (int)Math.Round(fNoise.GetNoise(i, j));
@@ -109,6 +135,47 @@ public class arraytoterraintest : MonoBehaviour
 
     }
 
+    private static int getStep(float value)
+    {
+        UnityEngine.Debug.Log(value);
+        if (value < 0.125f)
+        {
+            return 0;
+        }
+        else if (value < 0.24f)
+        {
+            return 1;
+        }
+        else if (value < 0.375f)
+        {
+            return 2;
+        }
+        else if (value < 0.5f)
+        {
+            return 3;
+        }
+        else if (value < 0.625f)
+        {
+            return 4;
+        }
+        else if (value < 0.75f)
+        {
+            return 5;
+        }
+        else if (value < 0.875f)
+        {
+            return 6;
+        }
+        else if (value < 1)
+        {
+            return 7;
+        }
+        else
+        {
+            return 8;
+        }
+    }
+
     public static IEnumerator generateChunkData(int chunkID)
     {
         //UnityEngine.Debug.Log("Generating Chunk Data for:" + chunkID);
@@ -143,9 +210,46 @@ public class arraytoterraintest : MonoBehaviour
             {
                 // Noise map effect range of y: 35 - 150
                 int deferAir = 0;
+                bool skipGrass = false;
                 float yTop = (arraytoterraintest.noiseMap[XS + 1600, ZS + 1600] * 115) + 35;
                 int ytopInt = (int)Math.Floor(yTop);
-
+                // if(getStep(yTop - (int)Math.Floor(yTop)) != 0 && getStep(yTop - (int)Math.Floor(yTop)) != 8){
+                //     switch (getStep(yTop - (int)Math.Floor(yTop)))
+                //     {
+                //         case 1:
+                //             tempChumk[ytopInt + 1, x, z] = GRASS18;
+                //             deferAir = 1;
+                //             break;
+                //         case 2:
+                //             tempChumk[ytopInt + 1, x, z] = GRASS28;
+                //             deferAir = 1;
+                //             break;
+                //         case 3:
+                //             tempChumk[ytopInt + 1, x, z] = GRASS38;
+                //             deferAir = 1;
+                //             break;
+                //         case 4:
+                //             tempChumk[ytopInt + 1, x, z] = GRASS48;
+                //             deferAir = 1;
+                //             break;
+                //         case 5:
+                //             tempChumk[ytopInt + 1, x, z] = GRASS58;
+                //         deferAir = 1;
+                //             break;
+                //         case 6:
+                //             tempChumk[ytopInt + 1, x, z] = GRASS68;
+                //             deferAir = 1;
+                //             break;
+                //         case 7:
+                //             tempChumk[ytopInt + 1, x, z] = GRASS78;
+                //             deferAir = 1;
+                //             break;
+                //         default:
+                //             UnityEngine.Debug.Log("Setting SKip Grass");
+                //             //skipGrass = true;
+                //             break;
+                //     }
+                // }
                 if (ytopInt < 68)
                 {
                     tempChumk[ytopInt, x, z] = DIRT;
@@ -157,14 +261,37 @@ public class arraytoterraintest : MonoBehaviour
                 else if (ytopInt > 100)
                 {
                     tempChumk[ytopInt, x, z] = SNOW_GRASS;
-                }else if(bushMap[XS + 1600, ZS + 1600] == 1){
+
+                    if (bushMap[XS + 1600, ZS + 1600] == 1)
+                    {
+                        ytopInt++;
+                        tempChumk[ytopInt, x, z] = WOOD;
+                        tempChumk[ytopInt + 1, x, z] = SNOW_LEAF;
+                        deferAir = 1;
+                    }
+                    else if (treeMap[XS + 1600, ZS + 1600] == 1)
+                    {
+                        ytopInt++;
+                        tempChumk[ytopInt, x, z] = WOOD;
+                        tempChumk[ytopInt + 1, x, z] = WOOD;
+                        tempChumk[ytopInt + 2, x, z] = WOOD;
+                        tempChumk[ytopInt + 3, x, z] = WOOD;
+                        tempChumk[ytopInt + 4, x, z] = SNOW_LEAF;
+                        tempChumk[ytopInt + 5, x, z] = SNOW_LEAF;
+                        deferAir = 5;
+                    }
+                }
+                else if (bushMap[XS + 1600, ZS + 1600] == 1)
+                {
                     ytopInt++;
-                    tempChumk[ytopInt, x, z] = WOOD; 
+                    tempChumk[ytopInt, x, z] = WOOD;
                     tempChumk[ytopInt + 1, x, z] = LEAF;
-                    deferAir = 1; 
-                }else if(treeMap[XS + 1600, ZS + 1600] == 1){
+                    deferAir = 1;
+                }
+                else if (treeMap[XS + 1600, ZS + 1600] == 1)
+                {
                     ytopInt++;
-                    tempChumk[ytopInt, x, z] = WOOD;                    
+                    tempChumk[ytopInt, x, z] = WOOD;
                     tempChumk[ytopInt + 1, x, z] = WOOD;
                     tempChumk[ytopInt + 2, x, z] = WOOD;
                     tempChumk[ytopInt + 3, x, z] = WOOD;
@@ -172,8 +299,13 @@ public class arraytoterraintest : MonoBehaviour
                     tempChumk[ytopInt + 5, x, z] = LEAF;
                     deferAir = 5;
 
-                }else{
-                    tempChumk[ytopInt, x, z] = GRASS;
+                }
+                else
+                {
+                    if (!skipGrass)
+                    {
+                        tempChumk[ytopInt, x, z] = GRASS;
+                    }
                 }
                 if (ytopInt < 70)
                 {
@@ -190,11 +322,11 @@ public class arraytoterraintest : MonoBehaviour
                 }
                 else
                 {
-                    
-                        for (int y = ytopInt + 1 + deferAir; y < 255; y++)
-                        {
-                            tempChumk[y, x, z] = AIR;
-                        }
+
+                    for (int y = ytopInt + 1 + deferAir; y < 255; y++)
+                    {
+                        tempChumk[y, x, z] = AIR;
+                    }
                 }
                 //Anything Below Dirt
                 for (int y = ytopInt - 1; y >= 0; y--)
@@ -207,41 +339,73 @@ public class arraytoterraintest : MonoBehaviour
                 // Is there a chair to the left right north or south us this block?
                 //Z Axis
                 // Can we Check Z?
-                if((treeMap[XS + 1600, (ZS + 1600) + 1] == 1)){
+                if ((treeMap[XS + 1600, (ZS + 1600) + 1] == 1))
+                {
                     float yTopt = (arraytoterraintest.noiseMap[XS + 1600, (ZS + 1600) + 1] * 115) + 35;
                     int ytopIntt = (int)Math.Floor(yTopt);
-                    if(ytopIntt > 72 && ytopIntt < 100){
+                    if (ytopIntt >= 72 && ytopIntt <= 100)
+                    {
                         tempChumk[ytopIntt + 3, x, z] = LEAF;
                         tempChumk[ytopIntt + 4, x, z] = LEAF;
                         tempChumk[ytopIntt + 5, x, z] = LEAF;
                     }
-                    
+                    else if (ytopIntt > 100)
+                    {
+                        tempChumk[ytopIntt + 3, x, z] = SNOW_LEAF;
+                        tempChumk[ytopIntt + 4, x, z] = SNOW_LEAF;
+                        tempChumk[ytopIntt + 5, x, z] = SNOW_LEAF;
+                    }
+
                 }
-                if((treeMap[XS + 1600, (ZS + 1600) - 1] == 1)){
+                if ((treeMap[XS + 1600, (ZS + 1600) - 1] == 1))
+                {
                     float yTopt = (arraytoterraintest.noiseMap[XS + 1600, (ZS + 1600) - 1] * 115) + 35;
                     int ytopIntt = (int)Math.Floor(yTopt);
-                    if(ytopIntt > 72 && ytopIntt < 100){
+                    if (ytopIntt >= 72 && ytopIntt <= 100)
+                    {
                         tempChumk[ytopIntt + 3, x, z] = LEAF;
                         tempChumk[ytopIntt + 4, x, z] = LEAF;
                         tempChumk[ytopIntt + 5, x, z] = LEAF;
                     }
+                    else if (ytopIntt > 100)
+                    {
+                        tempChumk[ytopIntt + 3, x, z] = SNOW_LEAF;
+                        tempChumk[ytopIntt + 4, x, z] = SNOW_LEAF;
+                        tempChumk[ytopIntt + 5, x, z] = SNOW_LEAF;
+                    }
                 }
-                if((treeMap[(XS + 1600) + 1, (ZS + 1600)] == 1)){
+                if ((treeMap[(XS + 1600) + 1, (ZS + 1600)] == 1))
+                {
                     float yTopt = (arraytoterraintest.noiseMap[(XS + 1600) + 1, ZS + 1600] * 115) + 35;
                     int ytopIntt = (int)Math.Floor(yTopt);
-                    if(ytopIntt > 72 && ytopIntt < 100){
+                    if (ytopIntt >= 72 && ytopIntt <= 100)
+                    {
                         tempChumk[ytopIntt + 3, x, z] = LEAF;
                         tempChumk[ytopIntt + 4, x, z] = LEAF;
                         tempChumk[ytopIntt + 5, x, z] = LEAF;
                     }
+                    else if (ytopIntt > 100)
+                    {
+                        tempChumk[ytopIntt + 3, x, z] = SNOW_LEAF;
+                        tempChumk[ytopIntt + 4, x, z] = SNOW_LEAF;
+                        tempChumk[ytopIntt + 5, x, z] = SNOW_LEAF;
+                    }
                 }
-                if((treeMap[(XS + 1600) - 1, (ZS + 1600)] == 1)){
+                if ((treeMap[(XS + 1600) - 1, (ZS + 1600)] == 1))
+                {
                     float yTopt = (arraytoterraintest.noiseMap[(XS + 1600) - 1, ZS + 1600] * 115) + 35;
                     int ytopIntt = (int)Math.Floor(yTopt);
-                    if(ytopIntt > 72 && ytopIntt < 100){
+                    if (ytopIntt >= 72 && ytopIntt <= 100)
+                    {
                         tempChumk[ytopIntt + 3, x, z] = LEAF;
                         tempChumk[ytopIntt + 4, x, z] = LEAF;
                         tempChumk[ytopIntt + 5, x, z] = LEAF;
+                    }
+                    else if (ytopIntt > 100)
+                    {
+                        tempChumk[ytopIntt + 3, x, z] = SNOW_LEAF;
+                        tempChumk[ytopIntt + 4, x, z] = SNOW_LEAF;
+                        tempChumk[ytopIntt + 5, x, z] = SNOW_LEAF;
                     }
                 }
                 ZS++;

@@ -3,10 +3,10 @@ ScriptsOnlyBuild:
     Assembly-CSharp.dll:
     - Chunk
     - FirstPersonAIO
+    - FreeFlyCamera
     - arraytoterraintest
     - cubeUVMapping
     Unity.CollabProxy.Editor.dll:
-    - Unity.Cloud.Collaborate.UserInterface.CollaborateWindow
     - Unity.Cloud.Collaborate.UserInterface.WindowCache
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
@@ -55,7 +55,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12618}
     - Class: 114
-      Script: {instanceID: 13086}
+      Script: {instanceID: 13088}
+    - Class: 114
+      Script: {instanceID: 15566}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 124
@@ -337,7 +339,7 @@ ScriptsOnlyBuild:
     className: Selectable
   - hash:
       serializedVersion: 2
-      Hash: c34a575998c10008209fda8c787bc964
+      Hash: 2a48fba328ffc8938e370dc453a92037
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: arraytoterraintest
@@ -629,7 +631,19 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
+  - hash:
+      serializedVersion: 2
+      Hash: ccb25a0a45cf86eff07b1c7dabeb034f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: FreeFlyCamera
+  - hash:
+      serializedVersion: 2
+      Hash: 81e982f2c5b68cf6f36e9b6e995514c0
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ToggleGameObjectEnable
   platform: 5
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/DMaiz/Unity Builds/Minecraft Clone/0.4.4/Minecraft Clone.exe
+  playerPath: C:/Users/DMaiz/Unity Builds/Minecraft Clone/0.4.5/Minecraft Clone.exe

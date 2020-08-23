@@ -135,7 +135,12 @@ public class Chunk : MonoBehaviour
                         if (chunkBuffer[y, x, z].getHasGameObject())
                         {
                             //UnityEngine.Debug.Log("Checking Coord: y:" + y + " x: " + x + " z: " + z + "isTransparent?:" + chunkBuffer[y, x, z].getIsTransparent());
-                            loadedGameObjects[y, x, z] = Instantiate(chunkBuffer[y, x, z].getGameObject(), new Vector3(XS, y, ZS), Quaternion.identity);
+                            if(chunkBuffer[y, x, z].getHasCoordModifier()){
+                                loadedGameObjects[y, x, z] = Instantiate(chunkBuffer[y, x, z].getGameObject(), new Vector3(XS + chunkBuffer[y, x, z].getxModifier(), y + chunkBuffer[y, x, z].getyModifier(), ZS + chunkBuffer[y, x, z].getzModifier()), Quaternion.identity);
+                            }else{
+                                loadedGameObjects[y, x, z] = Instantiate(chunkBuffer[y, x, z].getGameObject(), new Vector3(XS, y, ZS), Quaternion.identity);
+                            }
+                            
                             //chunkBuffer[y, x, z].getGameObject().transform.position = new Vector3(y, x, z);
                         }
 
