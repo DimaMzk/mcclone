@@ -3,17 +3,20 @@ ScriptsOnlyBuild:
     Assembly-CSharp.dll:
     - Chunk
     - FirstPersonAIO
-    - FreeFlyCamera
     - arraytoterraintest
     - cubeUVMapping
-    Unity.CollabProxy.Editor.dll:
-    - Unity.Cloud.Collaborate.UserInterface.WindowCache
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
     - UnityEditor.TestTools.TestRunner.TestRun.TestJobDataHolder
+    UnityEngine.UI.dll:
+    - UnityEngine.EventSystems.EventSystem
+    - UnityEngine.EventSystems.StandaloneInputModule
+    - UnityEngine.UI.CanvasScaler
+    - UnityEngine.UI.GraphicRaycaster
+    - UnityEngine.UI.Text
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
     - Class: 1
@@ -49,24 +52,42 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
+      Script: {instanceID: 11776}
+    - Class: 114
+      Script: {instanceID: 11976}
+    - Class: 114
       Script: {instanceID: 12212}
     - Class: 114
       Script: {instanceID: 12492}
     - Class: 114
+      Script: {instanceID: 12496}
+    - Class: 114
       Script: {instanceID: 12618}
     - Class: 114
-      Script: {instanceID: 13088}
+      Script: {instanceID: 13090}
     - Class: 114
-      Script: {instanceID: 15566}
+      Script: {instanceID: 13576}
+    - Class: 114
+      Script: {instanceID: 13992}
+    - Class: 114
+      Script: {instanceID: 14630}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 124
+      Script: {instanceID: 0}
+    - Class: 128
       Script: {instanceID: 0}
     - Class: 136
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
       Script: {instanceID: 0}
     - Class: 258
       Script: {instanceID: 0}
@@ -339,7 +360,7 @@ ScriptsOnlyBuild:
     className: Selectable
   - hash:
       serializedVersion: 2
-      Hash: 2a48fba328ffc8938e370dc453a92037
+      Hash: 89fb2cd902895ac21528576f1c02ee6a
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: arraytoterraintest
@@ -631,19 +652,7 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
-  - hash:
-      serializedVersion: 2
-      Hash: ccb25a0a45cf86eff07b1c7dabeb034f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: FreeFlyCamera
-  - hash:
-      serializedVersion: 2
-      Hash: 81e982f2c5b68cf6f36e9b6e995514c0
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: ToggleGameObjectEnable
   platform: 5
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/DMaiz/Unity Builds/Minecraft Clone/0.4.5/Minecraft Clone.exe
+  playerPath: C:/Users/DMaiz/Unity Builds/Minecraft Clone/0.4.6/Minecraft Clone.exe

@@ -3,19 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+[System.Serializable]
 public class Block
 {
     // Object Variables
+    [SerializeField]
     private bool isTransparent;
+    
+    [SerializeField]
     private GameObject objVar;
+
+    [SerializeField]
     private bool isLiquid;
+
+    [SerializeField]
     private bool hasCoordModifier;
+
+    [SerializeField]
     private float xModifier;
+
+    [SerializeField]
     private float zModifier;
+
+    [SerializeField]
     private float yModifier;
 
+    [SerializeField]
+    private int ID;
 
-    public Block(bool isTransparent, GameObject objVar, bool isLiquid)
+
+    public Block(bool isTransparent, GameObject objVar, bool isLiquid, int ID)
     {
         setTransparent(isTransparent);
         setGameObject(objVar);
@@ -23,7 +40,7 @@ public class Block
         UnityEngine.Debug.Log("Created New Block Object.... IS TRANSPARENT: " + getIsTransparent() + " HAS GAME OBEJECT: " + getHasGameObject());
     }
 
-    public Block(bool isTransparent, GameObject objVar, bool isLiquid, float xModifier, float zModifier, float yModifier){
+    public Block(bool isTransparent, GameObject objVar, bool isLiquid, float xModifier, float zModifier, float yModifier, int ID){
         setTransparent(isTransparent);
         setGameObject(objVar);
         setIsLiquid(isLiquid);
@@ -31,19 +48,22 @@ public class Block
         setxModifier(xModifier);
         setyModifier(yModifier);
         setzModifier(zModifier);
+        setID(ID);
     }
 
-    public Block(GameObject objVar)
+    public Block(GameObject objVar, int ID)
     {
         setGameObject(objVar);
         setTransparent(false);
+        setID(ID);
         UnityEngine.Debug.Log("Created New Block Object.... IS TRANSPARENT: " + getIsTransparent() + " HAS GAME OBEJECT: " + getHasGameObject());
     }
 
-    public Block(bool isTransparent)
+    public Block(bool isTransparent, int ID)
     {
         setTransparent(isTransparent);
         setGameObject(null);
+        setID(ID);
         UnityEngine.Debug.Log("Created New Block Object.... IS TRANSPARENT: " + getIsTransparent() + " HAS GAME OBEJECT: " + getHasGameObject());
     }
 
@@ -77,6 +97,14 @@ public class Block
     public void setIsLiquid(bool isLiquid)
     {
         this.isLiquid = isLiquid;
+    }
+
+    public void setID(int ID){
+        this.ID = ID;
+    }
+
+    public int getID(){
+        return ID;
     }
 
     public bool getIsLiquid()
