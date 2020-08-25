@@ -10,8 +10,6 @@ public class ChunkManager : MonoBehaviour
 {
 
     public static Chunk[] chunks;
-    public static bool[] loadedChunks;// Hard limit of all the chunks can be loaded, thought i would not recomment it
-
     public static Queue<string> chunksToLoad = new Queue<string>();
 
     public static List<string> loadedChunkList = new List<string>();
@@ -22,38 +20,42 @@ public class ChunkManager : MonoBehaviour
     private static int MAX_CHUNK_LOADERS = 2;
 
     public static Chunk getChunk(int x, int z)
-    {   
+    {
         //Is in memory?
-        foreach(Chunk chunk in chunks){
-            if(chunk.getIdX() == x && chunk.getIdZ() == z){
+        foreach (Chunk chunk in chunks)
+        {
+            if (chunk.getIdX() == x && chunk.getIdZ() == z)
+            {
                 return chunk;
             }
         }
 
         // Nope! Has it been generated?
-        if (!Directory.Exists("Chunks")){
+        if (!Directory.Exists("Chunks"))
+        {
             // Chunk Guarenteed does not exist
             Directory.CreateDirectory("Chunks");
-            //TODO: CALL FOR CHUNK GENERATION
-
-            //TODO: WRITE GENERATED CHUNK TO FILE
-
-            //TODO: RETURN GENERATED CHUNK
+            arraytoterraintest.generateChunkData(x, z);
+            return getChunk(x, z);
         }
-        if (!File.Exists("Chunks/" + x.ToString() + "#" + z.ToString() + ".json")) {
+        else if (!File.Exists("Chunks/" + x.ToString() + "#" + z.ToString() + ".json"))
+        {
             // Chunk has never been generated
-            //TODO: CALL FOR CHUNK GENERATION
-
-            //TODO: WRITE GENERATED CHUNK TO FILE
-
-            //TODO: RETURN GENERATED CHUNK
+            Directory.CreateDirectory("Chunks");
+            arraytoterraintest.generateChunkData(x, z);
+            return getChunk(x, z);
         }
+        else
+        {
 
-        //Chunk Has Been Generated Before
+            //Chunk Has Been Generated Before
 
-        //TODO: CALL FOR JSON -> CHUNK CONVERSION
+            //TODO: CALL FOR JSON -> CHUNK CONVERSION
+            string jsonData = ""; //TODO: assign jsonData, with data from disk
+            return jsonToChunk(jsonData);
 
-        //TODO: RETURN CONVERTED CHUNK
+            //TODO: RETURN CONVERTED CHUNK}        
+        }
     }
 
 
@@ -63,7 +65,7 @@ public class ChunkManager : MonoBehaviour
 
         if (!Directory.Exists("Chunks"))
             Directory.CreateDirectory("Chunks");
-            
+
         BinaryFormatter formatter = new BinaryFormatter();
         int x = chunk.getIdX();
         int z = chunk.getIdZ();
@@ -73,21 +75,48 @@ public class ChunkManager : MonoBehaviour
 
         //formatter.Serialize(saveFile, JsonUtility.ToJson(chunk));
 
-        StreamWriter m_WriterParameter = new StreamWriter(saveFile);  
-        m_WriterParameter.BaseStream.Seek(0, SeekOrigin.End);  
-        m_WriterParameter.Write(chunk.ToString());  
+        StreamWriter m_WriterParameter = new StreamWriter(saveFile);
+        m_WriterParameter.BaseStream.Seek(0, SeekOrigin.End);
+        m_WriterParameter.Write(chunk.ToString());
         UnityEngine.Debug.Log(chunk.ToString());
-        m_WriterParameter.Flush();  
-        m_WriterParameter.Close(); 
+        m_WriterParameter.Flush();
+        m_WriterParameter.Close();
 
         saveFile.Close();
 
 
         // If Chunk is Currently in memory, Update the in memory version
 
-        //TODO: Update Chunk in memory
+        // TODO: UPDATE IN MEMORY LISTING
 
 
+    }
+
+    public static Chunk jsonToChunk(string jsonData){
+        // Deserialize JSON to object
+
+        // int idX = JSONOBJ.idX;
+        // int idZ = JSONOBJ.idZ;
+        // bool isloaded = false; //If it's being read from disk, it is probably not loaded lmao
+        // int[,,] = JSONOBJ.chunkData;
+
+        
+
+        //
+    }
+
+    private static Block blockIdToBlock(int ID){
+        switch (ID)
+        {
+            case 0:
+                return arraytoterraintest.AIR;
+                break;
+            case 1: 
+                return arraytoterraintest.DIRT;
+                break;
+            //TODO: The Rest of These
+            default:
+        }
     }
 
     // public static bool isLoaded(string chunkID)
@@ -190,7 +219,7 @@ public class ChunkManager : MonoBehaviour
 
     //             for (int z = 0; z < 16; z++)
     //             {
-                    
+
     //                 if (blockShouldRender(y, x, z, chunkID, chunkBuffer))
     //                 {
 
@@ -202,7 +231,7 @@ public class ChunkManager : MonoBehaviour
     //                         }else{
     //                             loadedGameObjects[y, x, z] = Instantiate(chunkBuffer[y, x, z].getGameObject(), new Vector3(XS, y, ZS), Quaternion.identity);
     //                         }
-                            
+
     //                         //chunkBuffer[y, x, z].getGameObject().transform.position = new Vector3(y, x, z);
     //                     }
 
@@ -373,7 +402,7 @@ public class ChunkManager : MonoBehaviour
 
     //     if (x == 15)
     //     {
-            
+
 
     //         string tempChunk = chunkZSTR + arraytoterraintest.incrementChunk(chunkXSTR);
     //         int tempChunkI = int.Parse(tempChunk);
@@ -383,7 +412,7 @@ public class ChunkManager : MonoBehaviour
     //     }
     //     if (z == 0) // Want to decrement zchunk
     //     {
-            
+
 
     //         string tempChunk = arraytoterraintest.decrementChunk(chunkZSTR) + chunkXSTR;
     //         int tempChunkI = int.Parse(tempChunk);

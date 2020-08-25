@@ -196,7 +196,7 @@ public class arraytoterraintest : MonoBehaviour
 
     // private IEnumerator loadInitialData(){
     //     statusText.text = "Generating Map Data...";
-    //     noiseMap = Noise.GenerateNoiseMap(32000, 32000, SEED, 350, 2, .1f, 1.0f, new Vector2(0, 0));
+    ////     noiseMap = Noise.GenerateNoiseMap(32000, 32000, SEED, 350, 2, .1f, 1.0f, new Vector2(0, 0));
     //     statusText.text = "Allocation Memory for Foliage (Trees)";
     //     treeMap = new int[32000, 32000]; 
     //     statusText.text = "Allocation Memory for Foliage (Bushes)";
@@ -288,245 +288,241 @@ public class arraytoterraintest : MonoBehaviour
     //     }
     // }
 
-    // public static IEnumerator generateChunkData(int chunkID)
-    // {
-    //     //UnityEngine.Debug.Log("Generating Chunk Data for:" + chunkID);
+    public static IEnumerator generateChunkData(int posX, int posZ)
+    {
+        //UnityEngine.Debug.Log("Generating Chunk Data for:" + chunkID);
 
-    //     int[] XZRange = ChunkManager.getCoordRange(insureEightDigits(chunkID));
-    //     int XStart = XZRange[1];
-    //     int ZStart = XZRange[0];
+        int[] XZRange = ChunkManager.getCoordRange(posX, posZ);
+        int XStart = XZRange[1];
+        int ZStart = XZRange[0];
 
-    //     int XEnd = XZRange[3];
-    //     int ZEnd = XZRange[2];
+        int XEnd = XZRange[3];
+        int ZEnd = XZRange[2];
 
-    //     int XS = XStart;
-    //     int chunkZPOSITIVE = int.Parse(insureEightDigits(chunkID).Substring(0, 1));
-    //     int chunkXPOSITIVE = int.Parse(insureEightDigits(chunkID).Substring(4, 1));
+        // Need to generate heightmap for chunk area
 
-    //     // Create a chunk
-    //     Block[,,] tempChumk = new Block[255, 16, 16];
-    //     if (chunkXPOSITIVE == 0 && XS > 0)
-    //     {
-    //         XS = XEnd * (-1);
-    //     }
+        float[,] noiseMap = Noise.GenerateNoiseMap(18, 18, SEED, 350, 2, .1f, 1.0f, new Vector2(XStart, ZStart));
+        
+        // Need to generate Treemap AND Bushmap
 
-    //     for (int x = 0; x < 16; x++)
-    //     {
-    //         int ZS = ZStart;
-    //         if (chunkZPOSITIVE == 0 && ZS > 0)
-    //         {
-    //             ZS = ZEnd * (-1);
-    //         }
+        int[,] treeMap = new int[18, 18];
+        int[,] bushMap = new int[18, 18];
 
-    //         for (int z = 0; z < 16; z++)
-    //         {
-    //             // Noise map effect range of y: 35 - 150
-    //             int deferAir = 0;
-    //             bool skipGrass = false;
-    //             float yTop = (arraytoterraintest.noiseMap[XS + 1600, ZS + 1600] * 115) + 35;
-    //             int ytopInt = (int)Math.Floor(yTop);
-    //             // if(getStep(yTop - (int)Math.Floor(yTop)) != 0 && getStep(yTop - (int)Math.Floor(yTop)) != 8){
-    //             //     switch (getStep(yTop - (int)Math.Floor(yTop)))
-    //             //     {
-    //             //         case 1:
-    //             //             tempChumk[ytopInt + 1, x, z] = GRASS18;
-    //             //             deferAir = 1;
-    //             //             break;
-    //             //         case 2:
-    //             //             tempChumk[ytopInt + 1, x, z] = GRASS28;
-    //             //             deferAir = 1;
-    //             //             break;
-    //             //         case 3:
-    //             //             tempChumk[ytopInt + 1, x, z] = GRASS38;
-    //             //             deferAir = 1;
-    //             //             break;
-    //             //         case 4:
-    //             //             tempChumk[ytopInt + 1, x, z] = GRASS48;
-    //             //             deferAir = 1;
-    //             //             break;
-    //             //         case 5:
-    //             //             tempChumk[ytopInt + 1, x, z] = GRASS58;
-    //             //         deferAir = 1;
-    //             //             break;
-    //             //         case 6:
-    //             //             tempChumk[ytopInt + 1, x, z] = GRASS68;
-    //             //             deferAir = 1;
-    //             //             break;
-    //             //         case 7:
-    //             //             tempChumk[ytopInt + 1, x, z] = GRASS78;
-    //             //             deferAir = 1;
-    //             //             break;
-    //             //         default:
-    //             //             UnityEngine.Debug.Log("Setting SKip Grass");
-    //             //             //skipGrass = true;
-    //             //             break;
-    //             //     }
-    //             // }
-    //             if (ytopInt < 68)
-    //             {
-    //                 tempChumk[ytopInt, x, z] = DIRT;
-    //             }
-    //             else if (ytopInt >= 68 && ytopInt < 72)
-    //             {
-    //                 tempChumk[ytopInt, x, z] = SAND;
-    //             }
-    //             else if (ytopInt > 100)
-    //             {
-    //                 tempChumk[ytopInt, x, z] = SNOW_GRASS;
+        //Insure that the same treemap will be generate for this chunk everytime, for any given seed
+        Random rand = new Random(SEED + int.Parse(XStart.ToString() + ZStart.ToString()));
 
-    //                 if (bushMap[XS + 1600, ZS + 1600] == 1)
-    //                 {
-    //                     ytopInt++;
-    //                     tempChumk[ytopInt, x, z] = WOOD;
-    //                     tempChumk[ytopInt + 1, x, z] = SNOW_LEAF;
-    //                     deferAir = 1;
-    //                 }
-    //                 else if (treeMap[XS + 1600, ZS + 1600] == 1)
-    //                 {
-    //                     ytopInt++;
-    //                     tempChumk[ytopInt, x, z] = WOOD;
-    //                     tempChumk[ytopInt + 1, x, z] = WOOD;
-    //                     tempChumk[ytopInt + 2, x, z] = WOOD;
-    //                     tempChumk[ytopInt + 3, x, z] = WOOD;
-    //                     tempChumk[ytopInt + 4, x, z] = SNOW_LEAF;
-    //                     tempChumk[ytopInt + 5, x, z] = SNOW_LEAF;
-    //                     deferAir = 5;
-    //                 }
-    //             }
-    //             else if (bushMap[XS + 1600, ZS + 1600] == 1)
-    //             {
-    //                 ytopInt++;
-    //                 tempChumk[ytopInt, x, z] = WOOD;
-    //                 tempChumk[ytopInt + 1, x, z] = LEAF;
-    //                 deferAir = 1;
-    //             }
-    //             else if (treeMap[XS + 1600, ZS + 1600] == 1)
-    //             {
-    //                 ytopInt++;
-    //                 tempChumk[ytopInt, x, z] = WOOD;
-    //                 tempChumk[ytopInt + 1, x, z] = WOOD;
-    //                 tempChumk[ytopInt + 2, x, z] = WOOD;
-    //                 tempChumk[ytopInt + 3, x, z] = WOOD;
-    //                 tempChumk[ytopInt + 4, x, z] = LEAF;
-    //                 tempChumk[ytopInt + 5, x, z] = LEAF;
-    //                 deferAir = 5;
+        for(int i = 0; i < 18; i++){
+            for(int j = 0; j < 18; j++){
+                if (rand.Next(300) == 45) // 1/300 Chance Per block for a tree
+                {
+                    treeMap[i, j] = 1;
+                }
+                else
+                {
+                    treeMap[i, j] = 0;
+                }
+                if (rand.Next(500) == 45) // 1/500 chance per block for a bush
+                {
+                    bushMap[i, j] = 1;
+                }
+                else
+                {
+                    bushMap[i, j] = 0;
+                }
+            }
+        }
 
-    //             }
-    //             else
-    //             {
-    //                 if (!skipGrass)
-    //                 {
-    //                     tempChumk[ytopInt, x, z] = GRASS;
-    //                 }
-    //             }
-    //             if (ytopInt < 70)
-    //             {
-    //                 //anything higher until 70 is water
-    //                 for (int y = ytopInt + 1; y <= 70; y++)
-    //                 {
-    //                     tempChumk[y, x, z] = WATER_FULL;
-    //                 }
-    //                 // Anything higher than 70 is air
-    //                 for (int y = 71; y < 255; y++)
-    //                 {
-    //                     tempChumk[y, x, z] = AIR;
-    //                 }
-    //             }
-    //             else
-    //             {
+        int XS = XStart;
 
-    //                 for (int y = ytopInt + 1 + deferAir; y < 255; y++)
-    //                 {
-    //                     tempChumk[y, x, z] = AIR;
-    //                 }
-    //             }
-    //             //Anything Below Dirt
-    //             for (int y = ytopInt - 1; y >= 0; y--)
-    //             {
-    //                 tempChumk[y, x, z] = DIRT;
-    //             }
+        // Create a chunk
+        Block[,,] tempChumk = new Block[255, 16, 16];
+        if (XS < 0)
+        {
+            XS = XEnd * (-1);
+        }
+
+        for (int x = 0; x < 16; x++)
+        {
+            int ZS = ZStart;
+            if (ZS < 0)
+            {
+                ZS = ZEnd * (-1);
+            }
+
+            for (int z = 0; z < 16; z++)
+            {
+                // Noise map effect range of y: 35 - 150
+                int deferAir = 0;
+                float yTop = (noiseMap[x + 1, z + 1] * 115) + 35;
+                int ytopInt = (int)Math.Floor(yTop);
+                
+                if (ytopInt < 68)
+                {
+                    tempChumk[ytopInt, x, z] = DIRT;
+                }
+                else if (ytopInt >= 68 && ytopInt < 72)
+                {
+                    tempChumk[ytopInt, x, z] = SAND;
+                }
+                else if (ytopInt > 100)
+                {
+                    tempChumk[ytopInt, x, z] = SNOW_GRASS;
+
+                    if (bushMap[x + 1, z + 1] == 1)
+                    {
+                        ytopInt++;
+                        tempChumk[ytopInt, x, z] = WOOD;
+                        tempChumk[ytopInt + 1, x, z] = SNOW_LEAF;
+                        deferAir = 1;
+                    }
+                    else if (treeMap[x + 1, z + 1] == 1)
+                    {
+                        ytopInt++;
+                        tempChumk[ytopInt, x, z] = WOOD;
+                        tempChumk[ytopInt + 1, x, z] = WOOD;
+                        tempChumk[ytopInt + 2, x, z] = WOOD;
+                        tempChumk[ytopInt + 3, x, z] = WOOD;
+                        tempChumk[ytopInt + 4, x, z] = SNOW_LEAF;
+                        tempChumk[ytopInt + 5, x, z] = SNOW_LEAF;
+                        deferAir = 5;
+                    }
+                }
+                else if (bushMap[x + 1, z + 1] == 1)
+                {
+                    ytopInt++;
+                    tempChumk[ytopInt, x, z] = WOOD;
+                    tempChumk[ytopInt + 1, x, z] = LEAF;
+                    deferAir = 1;
+                }
+                else if (treeMap[x + 1, z + 1] == 1)
+                {
+                    ytopInt++;
+                    tempChumk[ytopInt, x, z] = WOOD;
+                    tempChumk[ytopInt + 1, x, z] = WOOD;
+                    tempChumk[ytopInt + 2, x, z] = WOOD;
+                    tempChumk[ytopInt + 3, x, z] = WOOD;
+                    tempChumk[ytopInt + 4, x, z] = LEAF;
+                    tempChumk[ytopInt + 5, x, z] = LEAF;
+                    deferAir = 5;
+
+                }
+                else
+                {
+                    
+                    
+                        tempChumk[ytopInt, x, z] = GRASS;
+                
+                }
+                if (ytopInt < 70)
+                {
+                    //anything higher until 70 is water
+                    for (int y = ytopInt + 1; y <= 70; y++)
+                    {
+                        tempChumk[y, x, z] = WATER_FULL;
+                    }
+                    // Anything higher than 70 is air
+                    for (int y = 71; y < 255; y++)
+                    {
+                        tempChumk[y, x, z] = AIR;
+                    }
+                }
+                else
+                {
+
+                    for (int y = ytopInt + 1 + deferAir; y < 255; y++)
+                    {
+                        tempChumk[y, x, z] = AIR;
+                    }
+                }
+                //Anything Below Dirt
+                for (int y = ytopInt - 1; y >= 0; y--)
+                {
+                    tempChumk[y, x, z] = DIRT;
+                }
 
 
-    //             // After the fact checks
-    //             // Is there a chair to the left right north or south us this block?
-    //             //Z Axis
-    //             // Can we Check Z?
-    //             if ((treeMap[XS + 1600, (ZS + 1600) + 1] == 1))
-    //             {
-    //                 float yTopt = (arraytoterraintest.noiseMap[XS + 1600, (ZS + 1600) + 1] * 115) + 35;
-    //                 int ytopIntt = (int)Math.Floor(yTopt);
-    //                 if (ytopIntt >= 72 && ytopIntt <= 100)
-    //                 {
-    //                     tempChumk[ytopIntt + 3, x, z] = LEAF;
-    //                     tempChumk[ytopIntt + 4, x, z] = LEAF;
-    //                     tempChumk[ytopIntt + 5, x, z] = LEAF;
-    //                 }
-    //                 else if (ytopIntt > 100)
-    //                 {
-    //                     tempChumk[ytopIntt + 3, x, z] = SNOW_LEAF;
-    //                     tempChumk[ytopIntt + 4, x, z] = SNOW_LEAF;
-    //                     tempChumk[ytopIntt + 5, x, z] = SNOW_LEAF;
-    //                 }
+                // After the fact checks
+                // Is there a chair to the left right north or south us this block?
+                //Z Axis
+                // Can we Check Z?
+                if ((treeMap[x + 1, (z + 1) + 1] == 1))
+                {
+                    float yTopt = (noiseMap[x + 1, (z + 1) + 1] * 115) + 35;
+                    int ytopIntt = (int)Math.Floor(yTopt);
+                    if (ytopIntt >= 72 && ytopIntt <= 100)
+                    {
+                        tempChumk[ytopIntt + 3, x, z] = LEAF;
+                        tempChumk[ytopIntt + 4, x, z] = LEAF;
+                        tempChumk[ytopIntt + 5, x, z] = LEAF;
+                    }
+                    else if (ytopIntt > 100)
+                    {
+                        tempChumk[ytopIntt + 3, x, z] = SNOW_LEAF;
+                        tempChumk[ytopIntt + 4, x, z] = SNOW_LEAF;
+                        tempChumk[ytopIntt + 5, x, z] = SNOW_LEAF;
+                    }
 
-    //             }
-    //             if ((treeMap[XS + 1600, (ZS + 1600) - 1] == 1))
-    //             {
-    //                 float yTopt = (arraytoterraintest.noiseMap[XS + 1600, (ZS + 1600) - 1] * 115) + 35;
-    //                 int ytopIntt = (int)Math.Floor(yTopt);
-    //                 if (ytopIntt >= 72 && ytopIntt <= 100)
-    //                 {
-    //                     tempChumk[ytopIntt + 3, x, z] = LEAF;
-    //                     tempChumk[ytopIntt + 4, x, z] = LEAF;
-    //                     tempChumk[ytopIntt + 5, x, z] = LEAF;
-    //                 }
-    //                 else if (ytopIntt > 100)
-    //                 {
-    //                     tempChumk[ytopIntt + 3, x, z] = SNOW_LEAF;
-    //                     tempChumk[ytopIntt + 4, x, z] = SNOW_LEAF;
-    //                     tempChumk[ytopIntt + 5, x, z] = SNOW_LEAF;
-    //                 }
-    //             }
-    //             if ((treeMap[(XS + 1600) + 1, (ZS + 1600)] == 1))
-    //             {
-    //                 float yTopt = (arraytoterraintest.noiseMap[(XS + 1600) + 1, ZS + 1600] * 115) + 35;
-    //                 int ytopIntt = (int)Math.Floor(yTopt);
-    //                 if (ytopIntt >= 72 && ytopIntt <= 100)
-    //                 {
-    //                     tempChumk[ytopIntt + 3, x, z] = LEAF;
-    //                     tempChumk[ytopIntt + 4, x, z] = LEAF;
-    //                     tempChumk[ytopIntt + 5, x, z] = LEAF;
-    //                 }
-    //                 else if (ytopIntt > 100)
-    //                 {
-    //                     tempChumk[ytopIntt + 3, x, z] = SNOW_LEAF;
-    //                     tempChumk[ytopIntt + 4, x, z] = SNOW_LEAF;
-    //                     tempChumk[ytopIntt + 5, x, z] = SNOW_LEAF;
-    //                 }
-    //             }
-    //             if ((treeMap[(XS + 1600) - 1, (ZS + 1600)] == 1))
-    //             {
-    //                 float yTopt = (arraytoterraintest.noiseMap[(XS + 1600) - 1, ZS + 1600] * 115) + 35;
-    //                 int ytopIntt = (int)Math.Floor(yTopt);
-    //                 if (ytopIntt >= 72 && ytopIntt <= 100)
-    //                 {
-    //                     tempChumk[ytopIntt + 3, x, z] = LEAF;
-    //                     tempChumk[ytopIntt + 4, x, z] = LEAF;
-    //                     tempChumk[ytopIntt + 5, x, z] = LEAF;
-    //                 }
-    //                 else if (ytopIntt > 100)
-    //                 {
-    //                     tempChumk[ytopIntt + 3, x, z] = SNOW_LEAF;
-    //                     tempChumk[ytopIntt + 4, x, z] = SNOW_LEAF;
-    //                     tempChumk[ytopIntt + 5, x, z] = SNOW_LEAF;
-    //                 }
-    //             }
-    //             ZS++;
-    //         }
-    //         XS++;
-    //     }
-    //     ChunkManager.setChunk(chunkID, tempChumk);
-    //     yield break;
-    // }
+                }
+                if ((treeMap[x + 1, (z + 1) - 1] == 1)) // This Looks Bad, But I need to redo it When I do biomes anyways, just need inifnite chunk system to WORK, before I refine this code lmao.
+                {
+                    float yTopt = (arraytoterraintest.noiseMap[x + 1, (z + 1) - 1] * 115) + 35;
+                    int ytopIntt = (int)Math.Floor(yTopt);
+                    if (ytopIntt >= 72 && ytopIntt <= 100)
+                    {
+                        tempChumk[ytopIntt + 3, x, z] = LEAF;
+                        tempChumk[ytopIntt + 4, x, z] = LEAF;
+                        tempChumk[ytopIntt + 5, x, z] = LEAF;
+                    }
+                    else if (ytopIntt > 100)
+                    {
+                        tempChumk[ytopIntt + 3, x, z] = SNOW_LEAF;
+                        tempChumk[ytopIntt + 4, x, z] = SNOW_LEAF;
+                        tempChumk[ytopIntt + 5, x, z] = SNOW_LEAF;
+                    }
+                }
+                if ((treeMap[(x + 1) + 1, (z + 1)] == 1))
+                {
+                    float yTopt = (arraytoterraintest.noiseMap[(x + 1) + 1, z + 1] * 115) + 35;
+                    int ytopIntt = (int)Math.Floor(yTopt);
+                    if (ytopIntt >= 72 && ytopIntt <= 100)
+                    {
+                        tempChumk[ytopIntt + 3, x, z] = LEAF;
+                        tempChumk[ytopIntt + 4, x, z] = LEAF;
+                        tempChumk[ytopIntt + 5, x, z] = LEAF;
+                    }
+                    else if (ytopIntt > 100)
+                    {
+                        tempChumk[ytopIntt + 3, x, z] = SNOW_LEAF;
+                        tempChumk[ytopIntt + 4, x, z] = SNOW_LEAF;
+                        tempChumk[ytopIntt + 5, x, z] = SNOW_LEAF;
+                    }
+                }
+                if ((treeMap[(x + 1) - 1, (z + 1)] == 1))
+                {
+                    float yTopt = (arraytoterraintest.noiseMap[(x + 1) - 1, z + 1] * 115) + 35;
+                    int ytopIntt = (int)Math.Floor(yTopt);
+                    if (ytopIntt >= 72 && ytopIntt <= 100)
+                    {
+                        tempChumk[ytopIntt + 3, x, z] = LEAF;
+                        tempChumk[ytopIntt + 4, x, z] = LEAF;
+                        tempChumk[ytopIntt + 5, x, z] = LEAF;
+                    }
+                    else if (ytopIntt > 100)
+                    {
+                        tempChumk[ytopIntt + 3, x, z] = SNOW_LEAF;
+                        tempChumk[ytopIntt + 4, x, z] = SNOW_LEAF;
+                        tempChumk[ytopIntt + 5, x, z] = SNOW_LEAF;
+                    }
+                }
+                ZS++;
+            }
+            XS++;
+        }
+
+        Chunk chunkToSet = new Chunk(tempChumk, posX, posZ);
+        ChunkManager.setChunk(chunkToSet);
+        yield break;
+    }
 
     // private string[] getChunkID(int x, int z)
     // {
