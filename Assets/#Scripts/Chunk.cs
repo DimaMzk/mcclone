@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Text;
 
 [System.Serializable]
 public class Chunk
@@ -19,12 +20,15 @@ public class Chunk
     [SerializeField]
     private bool isLoaded;
 
+    private GameObject[,,] GameObjects = new GameObject[255,16,16];
+
 
     public Chunk(Block[,,] chunkData, int idX, int idZ)
     {
         this.chunkData = chunkData;
         this.idX = idX;
         this.idZ = idZ;
+        this.isLoaded = false;
     }
 
     public void setChunk(Block[,,] chunkData)
@@ -47,7 +51,13 @@ public class Chunk
         this.isLoaded = isLoaded;
     }
 
+    public void setGameObjects(GameObject[,,] gameObjects){
+        this.GameObjects = gameObjects;
+    }
 
+    public GameObject[,,] GetGameObjects(){
+        return GameObjects;
+    }
 
     public bool getIsLoaded()
     {
@@ -68,51 +78,59 @@ public class Chunk
         return chunkData;
     }
 
-    override
-    public string ToString()
+    
+    public string ToJSON()
     {
-
-        string returnString = "{";
-        returnString += "\"idX\": " + idX.ToString() + ",";
-        returnString += "\"idZ\": " + idZ.ToString() + ",";
-        returnString += "\"isLoaded\" :" + isLoaded.ToString().ToLower() + ",";
-        returnString += "\"chunkData\": ["; // Y
+        StringBuilder sb = new StringBuilder(139310, 150000);
+        sb.Append("{");
+        sb.Append("\"idX\": " + idX.ToString() + ",");
+        sb.Append("\"idZ\": " + idZ.ToString() + ",");
+        sb.Append("\"isLoaded\" :" + isLoaded.ToString().ToLower() + ",");
+        sb.Append("\"chunkData\": ["); // Y
 
         for (int y = 0; y < 255; y++)
         {
-            returnString += "[";
+            sb.Append("[");
 
             for (int x = 0; x < 16; x++)
             {
-                returnString += "[";
+                sb.Append("[");
                 
                 for (int z = 0; z < 16; z++)
                 {
-                    returnString += chunkData[y, x, z].getID().ToString();
+                    sb.Append(chunkData[y, x, z].getID().ToString());
 
                     if (z != 15)
                     {
-                        returnString += ",";
+                        sb.Append(",");
                     }
                 }
 
-                returnString += "]";
+                sb.Append("]");
 
                 if (x != 15)
                 {
-                    returnString += ",";
+                    sb.Append(",");
                 }
             }
-            returnString += "]";
+            sb.Append("]");
 
             if (y != 254)
             {
-                returnString += ",";
+                sb.Append(",");
             }
         }
 
-        returnString += "]";
-        returnString += "}";
-        return returnString;
+        sb.Append("]");
+        sb.Append("}");
+        return sb.ToString();
+    }
+
+    public bool Equals(Chunk obj){
+        return obj.ToString().Equals(ToString());
+    }
+
+    public override string ToString(){
+        return "idZ:" + idZ.ToString() + "//idX:" + idX.ToString();
     }
 }
