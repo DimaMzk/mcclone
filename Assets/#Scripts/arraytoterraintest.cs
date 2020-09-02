@@ -10,6 +10,7 @@ public class arraytoterraintest : MonoBehaviour
 
     public GameObject player;
 
+    //Blocks
     public static Block DIRT;
     public static Block GRASS;
     public static Block SNOW_GRASS;
@@ -19,41 +20,13 @@ public class arraytoterraintest : MonoBehaviour
     public static Block AIR;
     public static Block WATER_FULL;
     public static Block SAND;
-    public static Block GRASS18;
-    public static Block GRASS28;
-    public static Block GRASS38;
-    public static Block GRASS48;
-    public static Block GRASS58;
-    public static Block GRASS68;
-    public static Block GRASS78;
-    //public static Block WATER_TOP;
 
-    public String currentCenterChunk;
-
+    // Variables
     public int currentXchunk;
     public int currentZchunk;
-
     private static System.Random SEED_GENERATOR = new System.Random();
-    public static int SEED = SEED_GENERATOR.Next(999999); 
-
-    public static float[,] noiseMap;
-    //private static FastNoise fNoise = new FastNoise(6969);
-
-    private System.Random rand = new System.Random(SEED);
-
-    public static int[,] treeMap;
-
-    public static int[,] bushMap; 
-
-    private static bool readyToGo = false;
-
-    private static bool initializing = false;
-
-
-
-    public int RENDERDISTANCE = 3; 
-
-    // Set GO Objectsdd
+    public static int SEED = SEED_GENERATOR.Next(999999);
+    public int RENDERDISTANCE;
 
 
 
@@ -71,119 +44,40 @@ public class arraytoterraintest : MonoBehaviour
         SAND = new Block(Resources.Load<GameObject>("prefabs/Sand"), 7);
         SNOW_GRASS = new Block(Resources.Load<GameObject>("prefabs/SnowGrass"), 8);
 
-        //GRASS 1 / 8th BLOCKS 
-        // GRASS18 = new Block(true, Resources.Load<GameObject>("prefabs/GRASS-1-8"), false, 0.0f, 0.0f, -.875f);
-        // GRASS28 = new Block(true, Resources.Load<GameObject>("prefabs/GRASS-2-8"), false, 0.0f, 0.0f, -.75f);
-        // GRASS38 = new Block(true, Resources.Load<GameObject>("prefabs/GRASS-3-8"), false, 0.0f, 0.0f, -.625f);
-        // GRASS48 = new Block(true, Resources.Load<GameObject>("prefabs/GRASS-4-8"), false, 0.0f, 0.0f, -.5f);
-        // GRASS58 = new Block(true, Resources.Load<GameObject>("prefabs/GRASS-5-8"), false, 0.0f, 0.0f, -.375f);
-        // GRASS68 = new Block(true, Resources.Load<GameObject>("prefabs/GRASS-6-8"), false, 0.0f, 0.0f, -.25f);
-        // GRASS78 = new Block(true, Resources.Load<GameObject>("prefabs/GRASS-7-8"), false, 0.0f, 0.0f, -.125f);
-        //WATER_TOP = new Block(true, Resources.Load<GameObject>("prefabs/waterTop"), true);
-
-    //     //TESTCHUNK GENERATION START
-    //   
-
-        int currentXCoord = (int)player.transform.position.x;
-        int currentZCoord = (int)player.transform.position.z;
-
-        int[] chunkIDData = coordToChunk(currentXCoord, currentZCoord);
-
-
+        int[] chunkIDData = coordToChunk(
+            (int)player.transform.position.x, 
+            (int)player.transform.position.z);
 
         int xchunk = chunkIDData[0];
         int zchunk = chunkIDData[1];
 
-        Chunk chunk = ChunkManager.getChunk(xchunk, zchunk);
-
-
-        ChunkManager.chunksToLoad.Enqueue(chunk); // Render the chunk directly below the player first
-        player.transform.position = new Vector3(currentXCoord, 150, currentZCoord);
+        ChunkManager.chunksToLoad.Enqueue(ChunkManager.getChunk(xchunk, zchunk)); // Render the chunk directly below the player first
+        player.transform.position = new Vector3((int)player.transform.position.x, 150, (int)player.transform.position.z);
         currentXchunk = xchunk;
         currentZchunk = zchunk;
-        StartCoroutine(renderRadius(xchunk, zchunk, RENDERDISTANCE));
-
-
-
+        renderRadius(xchunk, zchunk, RENDERDISTANCE);
     }
-        
+
     //Update is called once per frame
     void Update()
     {
-
-        int currentXCoord = (int)player.transform.position.x;
-        int currentZCoord = (int)player.transform.position.z;
-
-        int[] chunkIDData = coordToChunk(currentXCoord, currentZCoord);
-
-
-
+        int[] chunkIDData = coordToChunk(
+            (int)player.transform.position.x, 
+            (int)player.transform.position.z);
         int xchunk = chunkIDData[0];
         int zchunk = chunkIDData[1];
 
+        if (xchunk != currentXchunk || zchunk != currentZchunk)
+        {
+            currentXchunk = xchunk;
+            currentZchunk = zchunk;
+            renderRadius(xchunk, zchunk, RENDERDISTANCE);
+        }
 
-    if (xchunk != currentXchunk || zchunk != currentZchunk)
-    {
-        currentXchunk = xchunk;
-        currentZchunk = zchunk;
-        StartCoroutine(renderRadius(xchunk, zchunk, RENDERDISTANCE));
+        StartCoroutine(ChunkManager.loadNextChunk());
+        StartCoroutine(ChunkManager.unloadChunk());
     }
 
-    StartCoroutine(ChunkManager.loadNextChunk());
-        
-        
-
-    }
-
-    private IEnumerator loadInitialData(){
-
-        
-        readyToGo = true;
-        //statusText.text = "Done.";
-        yield break;
-    }
-
-
-    // private static int getStep(float value)
-    // {
-    //     UnityEngine.Debug.Log(value);
-    //     if (value < 0.125f)
-    //     {
-    //         return 0;
-    //     }
-    //     else if (value < 0.24f)
-    //     {
-    //         return 1;
-    //     }
-    //     else if (value < 0.375f)
-    //     {
-    //         return 2;
-    //     }
-    //     else if (value < 0.5f)
-    //     {
-    //         return 3;
-    //     }
-    //     else if (value < 0.625f)
-    //     {
-    //         return 4;
-    //     }
-    //     else if (value < 0.75f)
-    //     {
-    //         return 5;
-    //     }
-    //     else if (value < 0.875f)
-    //     {
-    //         return 6;
-    //     }
-    //     else if (value < 1)
-    //     {
-    //         return 7;
-    //     }
-    //     else
-    //     {
-    //         return 8;
-    //     }
-    // }
 
     public static Chunk generateChunkData(int posX, int posZ)
     {
@@ -232,9 +126,9 @@ public class arraytoterraintest : MonoBehaviour
         // Need to generate heightmap for chunk area
 
         //float[,] noiseMap = Noise.GenerateNoiseMap(48, 48, SEED, 350, 1, .1f, 1.0f, new Vector2(XStart, ZStart));
-        float[,] noiseMap = Noise.GenerateNoiseMap(48, 48, SEED, 0, 1, .1f, 1.0f, new Vector2(XStart, ZStart));
+        float[,] noiseMap = Noise.GenerateNoiseMap(48, 48, SEED, 350, 1, .1f, 1.0f, new Vector2(XStart, ZStart));
 
-        
+
         // Need to generate Treemap AND Bushmap
 
         int[,] treeMap = new int[48, 48];
@@ -255,15 +149,18 @@ public class arraytoterraintest : MonoBehaviour
         System.Random randznxn = new System.Random(SEED + (XStartznxn.ToString() + ZStartznxn.ToString()).GetHashCode());
 
 
-        for(int i = 0; i < 48; i++){
-            for(int j = 0; j < 48; j++){
+        for (int i = 0; i < 48; i++)
+        {
+            for (int j = 0; j < 48; j++)
+            {
 
-                if(i < 16 && j < 16){
+                if (i < 16 && j < 16)
+                {
                     //      +
                     //   |# O O
                     // - |O O O
                     //   |O O O
-                    if(randznxp.Next(300) == 45)
+                    if (randznxp.Next(300) == 45)
                     {
                         treeMap[i, j] = 1;
                     }
@@ -272,7 +169,7 @@ public class arraytoterraintest : MonoBehaviour
                         treeMap[i, j] = 0;
                     }
 
-                    if(randznxp.Next(500) == 45)
+                    if (randznxp.Next(500) == 45)
                     {
                         treeMap[i, j] = 1;
                     }
@@ -283,11 +180,12 @@ public class arraytoterraintest : MonoBehaviour
 
                 }
 
-                if(i >= 16 && i < 32 && j < 16){
+                if (i >= 16 && i < 32 && j < 16)
+                {
                     // O O O
                     // # O O
                     // O O O
-                    if(randzn.Next(300) == 45)
+                    if (randzn.Next(300) == 45)
                     {
                         treeMap[i, j] = 1;
                     }
@@ -296,7 +194,7 @@ public class arraytoterraintest : MonoBehaviour
                         treeMap[i, j] = 0;
                     }
 
-                    if(randzn.Next(500) == 45)
+                    if (randzn.Next(500) == 45)
                     {
                         treeMap[i, j] = 1;
                     }
@@ -306,11 +204,12 @@ public class arraytoterraintest : MonoBehaviour
                     }
                 }
 
-                if(i >= 32 && j < 16){
+                if (i >= 32 && j < 16)
+                {
                     // O O O
                     // O O O
                     // # O O
-                    if(randznxn.Next(300) == 45)
+                    if (randznxn.Next(300) == 45)
                     {
                         treeMap[i, j] = 1;
                     }
@@ -319,7 +218,7 @@ public class arraytoterraintest : MonoBehaviour
                         treeMap[i, j] = 0;
                     }
 
-                    if(randznxn.Next(500) == 45)
+                    if (randznxn.Next(500) == 45)
                     {
                         treeMap[i, j] = 1;
                     }
@@ -329,11 +228,12 @@ public class arraytoterraintest : MonoBehaviour
                     }
                 }
 
-                if(i < 16 && j >= 16 && j < 32){
+                if (i < 16 && j >= 16 && j < 32)
+                {
                     // O # O
                     // O O O
                     // O O O
-                    if(randxp.Next(300) == 45)
+                    if (randxp.Next(300) == 45)
                     {
                         treeMap[i, j] = 1;
                     }
@@ -342,7 +242,7 @@ public class arraytoterraintest : MonoBehaviour
                         treeMap[i, j] = 0;
                     }
 
-                    if(randxp.Next(500) == 45)
+                    if (randxp.Next(500) == 45)
                     {
                         treeMap[i, j] = 1;
                     }
@@ -352,11 +252,12 @@ public class arraytoterraintest : MonoBehaviour
                     }
                 }
 
-                if(i >= 16 && i < 32 && j >= 16 && j < 32){
+                if (i >= 16 && i < 32 && j >= 16 && j < 32)
+                {
                     // O O O
                     // O # O
                     // O O O
-                    if(rand.Next(300) == 45)
+                    if (rand.Next(300) == 45)
                     {
                         treeMap[i, j] = 1;
                     }
@@ -365,7 +266,7 @@ public class arraytoterraintest : MonoBehaviour
                         treeMap[i, j] = 0;
                     }
 
-                    if(rand.Next(500) == 45)
+                    if (rand.Next(500) == 45)
                     {
                         treeMap[i, j] = 1;
                     }
@@ -375,11 +276,12 @@ public class arraytoterraintest : MonoBehaviour
                     }
                 }
 
-                if(i >= 32 && j >= 16 && j < 32){
+                if (i >= 32 && j >= 16 && j < 32)
+                {
                     // O O O
                     // O O O
                     // O # O
-                    if(randxn.Next(300) == 45)
+                    if (randxn.Next(300) == 45)
                     {
                         treeMap[i, j] = 1;
                     }
@@ -388,30 +290,7 @@ public class arraytoterraintest : MonoBehaviour
                         treeMap[i, j] = 0;
                     }
 
-                    if(randxn.Next(500) == 45)
-                    {
-                        treeMap[i, j] = 1;
-                    }
-                    else
-                    {
-                        treeMap[i, j] = 0;
-                    }
-                }
-
-                if (i < 16 && j >= 32){
-                    // O O #
-                    // O O O
-                    // O O O
-                    if(randzpxp.Next(300) == 45)
-                    {
-                        treeMap[i, j] = 1;
-                    }
-                    else
-                    {
-                        treeMap[i, j] = 0;
-                    }
-
-                    if(randzpxp.Next(500) == 45)
+                    if (randxn.Next(500) == 45)
                     {
                         treeMap[i, j] = 1;
                     }
@@ -421,11 +300,12 @@ public class arraytoterraintest : MonoBehaviour
                     }
                 }
 
-                if(i >= 16 && i < 32 && j >= 32){
-                    // O O O
+                if (i < 16 && j >= 32)
+                {
                     // O O #
                     // O O O
-                    if(randzp.Next(300) == 45)
+                    // O O O
+                    if (randzpxp.Next(300) == 45)
                     {
                         treeMap[i, j] = 1;
                     }
@@ -434,7 +314,7 @@ public class arraytoterraintest : MonoBehaviour
                         treeMap[i, j] = 0;
                     }
 
-                    if(randzp.Next(500) == 45)
+                    if (randzpxp.Next(500) == 45)
                     {
                         treeMap[i, j] = 1;
                     }
@@ -444,11 +324,12 @@ public class arraytoterraintest : MonoBehaviour
                     }
                 }
 
-                if(i >= 32 && j >= 32){
-                    // O O O
+                if (i >= 16 && i < 32 && j >= 32)
+                {
                     // O O O
                     // O O #
-                    if(randzpxn.Next(300) == 45)
+                    // O O O
+                    if (randzp.Next(300) == 45)
                     {
                         treeMap[i, j] = 1;
                     }
@@ -457,7 +338,31 @@ public class arraytoterraintest : MonoBehaviour
                         treeMap[i, j] = 0;
                     }
 
-                    if(randzpxn.Next(500) == 45)
+                    if (randzp.Next(500) == 45)
+                    {
+                        treeMap[i, j] = 1;
+                    }
+                    else
+                    {
+                        treeMap[i, j] = 0;
+                    }
+                }
+
+                if (i >= 32 && j >= 32)
+                {
+                    // O O O
+                    // O O O
+                    // O O #
+                    if (randzpxn.Next(300) == 45)
+                    {
+                        treeMap[i, j] = 1;
+                    }
+                    else
+                    {
+                        treeMap[i, j] = 0;
+                    }
+
+                    if (randzpxn.Next(500) == 45)
                     {
                         treeMap[i, j] = 1;
                     }
@@ -492,7 +397,7 @@ public class arraytoterraintest : MonoBehaviour
                 int deferAir = 0;
                 float yTop = (noiseMap[x + 16, z + 16] * 115) + 35;
                 int ytopInt = (int)Math.Floor(yTop);
-                
+
                 if (ytopInt < 68)
                 {
                     tempChumk[ytopInt, x, z] = DIRT;
@@ -545,10 +450,10 @@ public class arraytoterraintest : MonoBehaviour
                 }
                 else
                 {
-                    
-                    
-                        tempChumk[ytopInt, x, z] = GRASS;
-                
+
+
+                    tempChumk[ytopInt, x, z] = GRASS;
+
                 }
                 if (ytopInt < 70)
                 {
@@ -661,61 +566,49 @@ public class arraytoterraintest : MonoBehaviour
         return chunkToSet;
     }
 
+
     private int[] coordToChunk(int x, int z)
     {
-        int currentXCoord = x;
-        int currentZCoord = z;
         int xchunkI = 0;
         int zchunkI = 0;
-        if (currentXCoord >= 0 && currentXCoord <= 15)
-        {
-            xchunkI = 0;
-        }
-        else if (currentXCoord <= -1 && currentXCoord >= -16)
-        {
-            xchunkI = -1;
-        }
-
-        if (currentZCoord >= 0 && currentZCoord <= 15)
-        {
-            zchunkI = 0;
-        }
-        else if (currentZCoord <= -1 && currentZCoord >= -16)
-        {
-            zchunkI = -1;
-        }
 
         // Positive Axis
-
-        if (currentZCoord >= 0)
+        if (z >= 0)
         {
-            zchunkI = (currentZCoord / 16);
+            zchunkI = (z / 16);
         }
-        if (currentXCoord >= 0)
+        if (x >= 0)
         {
-            xchunkI = (currentXCoord / 16);
+            xchunkI = (x / 16);
         }
 
         // Negative Axis
-        if (currentZCoord < 0)
+        if (z < 0)
         {
-            zchunkI = (currentZCoord) / 16;
+            zchunkI = ((z) / 16) - 1;
         }
-        if (currentXCoord < 0)
+        if (x < 0)
         {
-            xchunkI = (currentXCoord) / 16;
+            xchunkI = ((x) / 16) - 1;
         }
         int[] returnString = new int[2];
-
         returnString[0] = xchunkI;
         returnString[1] = zchunkI;
-
         return returnString;
-
     }
 
-    IEnumerator renderRadius(int xchunk, int zchunk, int radius)
+
+    void renderRadius(int xchunk, int zchunk, int radius)
     {
+        ChunkManager.chunksToLoad.Clear();
+        ChunkManager.chunksToUnload.Clear();
+        Chunk tmpChunk = ChunkManager.getChunk(xchunk, zchunk);
+
+        if (!tmpChunk.getIsLoaded() && !ChunkManager.chunksToLoad.Contains(tmpChunk))
+        {
+            ChunkManager.chunksToLoad.Enqueue(tmpChunk);
+        }
+
         int firstChunkXAxisToRender = xchunk;
         int firstChunkZAxisToRender = zchunk;
 
@@ -723,8 +616,7 @@ public class arraytoterraintest : MonoBehaviour
         {
             firstChunkXAxisToRender++;
             firstChunkZAxisToRender--;
-        } 
-        UnityEngine.Debug.Log("First Chunk: " + firstChunkXAxisToRender + ", " + firstChunkZAxisToRender);
+        }
 
         int lastChunkXAxisToRender = xchunk;
         int lastChunkZAxisToRender = zchunk;
@@ -734,39 +626,55 @@ public class arraytoterraintest : MonoBehaviour
             lastChunkXAxisToRender--;
             lastChunkZAxisToRender++;
         }
-        UnityEngine.Debug.Log("Last Chunk: " + lastChunkXAxisToRender + ", " + lastChunkZAxisToRender);
-
 
         // Make an array of chunks we want rendered.
         int[,] chunksWeWantRendered = new int[1024, 2];
         int counter = 0;
-        for (int xAxis = firstChunkXAxisToRender; xAxis != lastChunkXAxisToRender; xAxis--)
+
+        for (int xAxis = firstChunkXAxisToRender; xAxis >= lastChunkXAxisToRender; xAxis--)
         {
-            for (int zAxis = firstChunkZAxisToRender; zAxis != lastChunkZAxisToRender; zAxis++)
+            for (int zAxis = firstChunkZAxisToRender; zAxis <= lastChunkZAxisToRender; zAxis++)
             {
                 chunksWeWantRendered[counter, 0] = xAxis;
                 chunksWeWantRendered[counter, 1] = zAxis;
                 Chunk tChunk = ChunkManager.getChunk(xAxis, zAxis);
-                if(!tChunk.getIsLoaded()){
-                    ChunkManager.chunksToLoad.Enqueue(tChunk);
+
+                if (!tChunk.getIsLoaded() && !tChunk.Equals(tmpChunk))
+                {
+
+                    if (!ChunkManager.chunksToLoad.Contains(tChunk))
+                    {
+                        ChunkManager.chunksToLoad.Enqueue(tChunk);
+                    }
+
                 }
+
                 counter++;
             }
         }
+
         List<Chunk> chunksCopy = new List<Chunk>(ChunkManager.chunks);
-        foreach (Chunk chunk in chunksCopy){
+
+        foreach (Chunk chunk in chunksCopy)
+        {
             bool match = false;
-            for (int j = 0; j < counter; j++){
-                if(chunk.getIdX() == chunksWeWantRendered[j, 0] && chunk.getIdZ() == chunksWeWantRendered[j, 1]){
+
+            for (int j = 0; j < counter; j++)
+            {
+                if (chunk.getIdX() == chunksWeWantRendered[j, 0] && chunk.getIdZ() == chunksWeWantRendered[j, 1])
+                {
                     match = true;
                 }
             }
-            if(!match){
-                yield return ChunkManager.unloadChunk(chunk);
+
+            if (!match)
+            {
+                if (chunk.getIsLoaded())
+                {
+                    ChunkManager.chunksToUnload.Enqueue(chunk);
+                }
             }
         }
-        //yield return ChunkManager.flushUnloadedChunks();
-        yield break;
     }
 }
 

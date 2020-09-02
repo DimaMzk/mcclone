@@ -14,9 +14,6 @@ ScriptsOnlyBuild:
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.StandaloneInputModule
-    - UnityEngine.UI.CanvasScaler
-    - UnityEngine.UI.GraphicRaycaster
-    - UnityEngine.UI.Text
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
     - Class: 1
@@ -52,10 +49,6 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 11782}
-    - Class: 114
-      Script: {instanceID: 11986}
-    - Class: 114
       Script: {instanceID: 12222}
     - Class: 114
       Script: {instanceID: 12502}
@@ -66,28 +59,18 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 13164}
     - Class: 114
-      Script: {instanceID: 13592}
-    - Class: 114
       Script: {instanceID: 14008}
     - Class: 114
-      Script: {instanceID: 14786}
+      Script: {instanceID: 14664}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 124
-      Script: {instanceID: 0}
-    - Class: 128
       Script: {instanceID: 0}
     - Class: 136
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
-      Script: {instanceID: 0}
-    - Class: 222
-      Script: {instanceID: 0}
-    - Class: 223
-      Script: {instanceID: 0}
-    - Class: 224
       Script: {instanceID: 0}
     - Class: 258
       Script: {instanceID: 0}
@@ -360,7 +343,7 @@ ScriptsOnlyBuild:
     className: Selectable
   - hash:
       serializedVersion: 2
-      Hash: dbf41a947332df099db8a3632a58b492
+      Hash: 4bc8e1744ed904290eece74a94f8b275
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: arraytoterraintest
@@ -655,5 +638,4 @@ ScriptsOnlyBuild:
   platform: 5
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/DMaiz/Unity Builds/Minecraft Clone/Pain and Suffering [0.4.7
-    Dev]/Minecraft Clone.exe
+  playerPath: C:/Users/DMaiz/UnityBuilds/MCClone/0.4.6/Minecraft Clone.exe

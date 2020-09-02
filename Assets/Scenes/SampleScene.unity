@@ -251,10 +251,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 393937524}
-  currentCenterChunk: 
   currentXchunk: 0
   currentZchunk: 0
-  RENDERDISTANCE: 1
+  RENDERDISTANCE: 2
 --- !u!4 &1084579324
 Transform:
   m_ObjectHideFlags: 0

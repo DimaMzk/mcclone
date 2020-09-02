@@ -12,28 +12,31 @@ public class ChunkManager : MonoBehaviour
 
     public static List<Chunk> chunks = new List<Chunk>();
     public static Queue<Chunk> chunksToLoad = new Queue<Chunk>();
-
-    //public static List<string> loadedChunkList = new List<string>();
-
-    //static object[] gameObjects = new object[99999999]; // Loaded Gameobejcts to Destroy upon unload
-
+    public static Queue<Chunk> chunksToUnload = new Queue<Chunk>();
     private static int load_chunk_is_running = 0;
+    private static int unload_chunk_is_running = 0;
     private static int MAX_CHUNK_LOADERS = 1;
-    private static int flushers = 0;
-    private static int MAX_FLUSHERS = 1;
+    private static int MAX_CHUNK_UNLOADERS = 1;
     private static bool DEBUG = false;
+
 
     public static Chunk getChunk(int x, int z)
     {
         //Is in memory?
-        if (chunks.Count != 0)
+        if (chunks.Count != 0) 
         {
             List<Chunk> chunksCopy = new List<Chunk>(chunks);
             foreach (Chunk chunk in chunksCopy)
             {
 
                 if (chunk != null && chunk.getIdX() == x && chunk.getIdZ() == z)
-                {
+                {   
+
+                    if(DEBUG){
+                        //Uncomment line below only if you really need this information, A single chunk gets called several thousand times per chunk load.
+                        //UnityEngine.Debug.Log("Returned Chunk " + x.ToString() +"#"+ z.ToString() + " From Memory"); 
+                    }
+
                     return chunk;
                 }
             }
@@ -45,37 +48,51 @@ public class ChunkManager : MonoBehaviour
         {
             // Chunk Guarenteed does not exist
             Directory.CreateDirectory("Chunks");
+
+            if(DEBUG){
+                //Uncomment line below only if you really need this information, A single chunk gets called several thousand times per chunk load.
+                //UnityEngine.Debug.Log("Returned Chunk " + x.ToString() +"#"+ z.ToString() + " From generateChunkData");
+            }
+
             return arraytoterraintest.generateChunkData(x, z);
         }
+
         else if (!File.Exists("Chunks/" + x.ToString() + "#" + z.ToString() + ".json"))
         {
             // Chunk has never been generated
             Directory.CreateDirectory("Chunks");
-            return arraytoterraintest.generateChunkData(x, z);
 
+            if(DEBUG){
+                //Uncomment line below only if you really need this information, A single chunk gets called several thousand times per chunk load.
+               // UnityEngine.Debug.Log("Returned Chunk " + x.ToString() +"#"+ z.ToString() + " From generateChunkData");
+            }
+
+            return arraytoterraintest.generateChunkData(x, z);
         }
+
         else
         {
             //Chunk Has Been Generated Before
             FileStream file;
 
             if (File.Exists("Chunks/" + x.ToString() + "#" + z.ToString() + ".json"))
-            {
                 file = File.OpenRead("Chunks/" + x.ToString() + "#" + z.ToString() + ".json");
-            }
             else
-            {
                 throw new Exception("File that existed a second ago, no longer exists. This is a real bruh moment.");
-            }
 
             BinaryFormatter bf = new BinaryFormatter();
 
             string data = (string)bf.Deserialize(file);
             file.Close();
+
+            if(DEBUG){
+                //Uncomment line below only if you really need this information, A single chunk gets called several thousand times per chunk load.
+                //UnityEngine.Debug.Log("Returned Chunk " + x.ToString() +"#"+ z.ToString() + " From Disk");
+            }
+
             return jsonToChunk(data);
         }
     }
-
 
 
     public static void setChunk(Chunk chunk)
@@ -91,23 +108,21 @@ public class ChunkManager : MonoBehaviour
         string destination = ("Chunks/" + filename);
         if (DEBUG)
         {
-            UnityEngine.Debug.Log(chunk.ToJSON());
+            // Uncomment Line Below Only If You Really Need This Information, Is Outputs A Lot, And Gives The Console A Pretty Bad Time :)
+            //UnityEngine.Debug.Log(chunk.ToJSON());
         }
         FileStream file;
 
         if (File.Exists(destination))
-        {
             file = File.OpenWrite(destination);
-        }
         else
-        {
             file = File.Create(destination);
-        }
 
         BinaryFormatter bf = new BinaryFormatter();
         bf.Serialize(file, chunk.ToJSON());
         file.Close();
     }
+
 
     public static Chunk jsonToChunk(string jsonData)
     {
@@ -115,10 +130,12 @@ public class ChunkManager : MonoBehaviour
         return myDeserializedClass.toChunk();
     }
 
+
     public static IEnumerator loadNextChunk()
     {
-        if (load_chunk_is_running >= MAX_CHUNK_LOADERS) { yield break; }
+        if (load_chunk_is_running >= MAX_CHUNK_LOADERS) yield break; 
         load_chunk_is_running++;
+
         if (chunksToLoad.Count == 0)
         {
             load_chunk_is_running--;
@@ -126,23 +143,21 @@ public class ChunkManager : MonoBehaviour
         }
 
         Chunk toLoad = chunksToLoad.Dequeue();
+
         if (toLoad == null)
-        {
             throw new Exception("Invalid Chunk. Chunk was null");
-        }
 
         if (toLoad.getIsLoaded()) // Don't double load the same chunk, punk!
         {
-            //UnityEngine.Debug.Log("Not Rendering chunk " + chunkID + " beacause it is already loaded...");
             load_chunk_is_running--;
             yield break;
         }
+
         //Make Sure Surrounding Chunks Have Loaded Data are in memory
         loadIntoMemory(toLoad.getIdX(), toLoad.getIdZ() + 1);
         loadIntoMemory(toLoad.getIdX(), toLoad.getIdZ() - 1);
         loadIntoMemory(toLoad.getIdX() + 1, toLoad.getIdZ());
         loadIntoMemory(toLoad.getIdX() - 1, toLoad.getIdZ());
-
 
         int[] XZRange = getCoordRange(toLoad.getIdX(), toLoad.getIdZ());
         int XStart = XZRange[1];
@@ -151,26 +166,16 @@ public class ChunkManager : MonoBehaviour
         int XEnd = XZRange[3];
         int ZEnd = XZRange[2];
 
-        //     // //Bad way of converting object to array lmao
         Block[,,] chunkBuffer = toLoad.getChunk();
-
         GameObject[,,] loadedGameObjects = new GameObject[255, 16, 16];
 
         for (int y = 0; y < 255; y++)
         {
             int XS = XStart;
-            //if (XS < 0)
-            //{
-            //    XS = XEnd * (-1);
-            //}
 
             for (int x = 0; x < 16; x++)
             {
                 int ZS = ZStart;
-                // if (ZS < 0)
-                //{
-                //    ZS = ZEnd * (-1);
-                //}
 
                 for (int z = 0; z < 16; z++)
                 {
@@ -180,19 +185,11 @@ public class ChunkManager : MonoBehaviour
 
                         if (chunkBuffer[y, x, z].getHasGameObject())
                         {
-                            //UnityEngine.Debug.Log("Checking Coord: y:" + y + " x: " + x + " z: " + z + "isTransparent?:" + chunkBuffer[y, x, z].getIsTransparent());
                             if (chunkBuffer[y, x, z].getHasCoordModifier())
-                            {
                                 loadedGameObjects[y, x, z] = Instantiate(chunkBuffer[y, x, z].getGameObject(), new Vector3(XS + chunkBuffer[y, x, z].getxModifier(), y + chunkBuffer[y, x, z].getyModifier(), ZS + chunkBuffer[y, x, z].getzModifier()), Quaternion.identity);
-                            }
                             else
-                            {
                                 loadedGameObjects[y, x, z] = Instantiate(chunkBuffer[y, x, z].getGameObject(), new Vector3(XS, y, ZS), Quaternion.identity);
-                            }
-
-                            //chunkBuffer[y, x, z].getGameObject().transform.position = new Vector3(y, x, z);
                         }
-
                     }
                     ZS++;
                 }
@@ -205,75 +202,112 @@ public class ChunkManager : MonoBehaviour
         toLoad.setIsLoaded(true);
         setChunkMem(toLoad);
         load_chunk_is_running--;
+        if(DEBUG) UnityEngine.Debug.Log("Loaded Chunk: " + toLoad.ToString());
         yield break;
-
     }
 
 
-    public static IEnumerator unloadChunk(Chunk chunk)
+    public static IEnumerator unloadChunk()
     {
-        if (!chunk.getIsLoaded()) // Don't double unload load the same chunk, punk!
+        if (unload_chunk_is_running >= MAX_CHUNK_UNLOADERS) yield break;
+
+        unload_chunk_is_running++;
+
+        if (chunksToUnload.Count == 0)
         {
-            //UnityEngine.Debug.Log("Not unloading chunk " + chunkID + " beacause it is already unloaded...");
+            unload_chunk_is_running--;
             yield break;
         }
 
+        Chunk chunk = chunksToUnload.Dequeue();
         GameObject[,,] loadedGameObjects = chunk.GetGameObjects();
 
-        for (int y = 0; y < 255; y++)
+        if (!chunk.getIsLoaded()) // Don't double unload load the same chunk, punk!
         {
+            unload_chunk_is_running--;
+            yield break;
+        }
+        
+        if(loadedGameObjects != null){
 
-            for (int x = 0; x < 16; x++)
+            for (int y = 0; y < 255; y++)
             {
 
-
-                for (int z = 0; z < 16; z++)
+                for (int x = 0; x < 16; x++)
                 {
 
-                    if (loadedGameObjects[y, x, z] != null)
+
+                    for (int z = 0; z < 16; z++)
                     {
-                        Destroy(loadedGameObjects[y, x, z]);
+
+                        if (loadedGameObjects[y, x, z] != null)
+                            Destroy(loadedGameObjects[y, x, z]);
+                        
+
                     }
 
                 }
-
             }
         }
+        
         chunk.setIsLoaded(false);
         chunk.setGameObjects(null);
         setChunkMem(chunk);
+        chunks.Remove(chunk);
+        setChunk(chunk);
+        unload_chunk_is_running--;
+
+        if(DEBUG)
+            UnityEngine.Debug.Log("Unloaded chunk: " + chunk.ToString());
         yield break;
     }
 
+
     public static void setChunkMem(Chunk chunk)
     {   
-
-        if(chunks.Contains(chunk)){
-            return;
-        }
-        
+        if(DEBUG)
+            UnityEngine.Debug.Log("Received Request to Update: "  + chunk.ToString()); 
+        bool updated = false;
         List<Chunk> chunksCopy = new List<Chunk>(chunks);
+
         foreach (Chunk chunkk in chunksCopy)
         {
+
             if (chunkk.getIdX() == chunk.getIdX() && chunkk.getIdZ() == chunk.getIdZ())
             {   
-
-
                 chunks.Remove(chunkk);
-
                 chunkk.setChunk(chunk.getChunk());
                 chunkk.setIsLoaded(chunk.getIsLoaded());
                 chunkk.setGameObjects(chunk.GetGameObjects());
                 chunks.Add(chunkk);
+                if(DEBUG)
+                    UnityEngine.Debug.Log("Updated Chunk in Memory" + chunkk.ToString());
+                updated = true;
+            }
+        }
 
+        if(!updated){
+            if(DEBUG) UnityEngine.Debug.Log(chunk.ToString() + "Did not appear to be in memory :/ Adding to memory. Double Checking, Then Adding");
+            
+            if(!chunks.Contains(chunk)){
+                chunks.Add(chunk);
+                if(DEBUG) UnityEngine.Debug.Log(chunk.ToString() + " Has been added to memory");
+            }
+            else{
+                chunks.Remove(chunk);
+                chunks.Add(chunk);
+                if(DEBUG) UnityEngine.Debug.Log("Was in chunks, updated " + chunks.ToString());
             }
         }
     }
+
+
     public static void loadIntoMemory(int idx, int idz)
     {
         Chunk chunk = getChunk(idx, idz);
         bool found = false;
         List<Chunk> chunksCopy = new List<Chunk>(chunks);
+
         foreach (Chunk chunkk in chunksCopy)
         {
             if (chunkk.getIdX() == chunk.getIdX() && chunkk.getIdZ() == chunk.getIdZ())
@@ -286,26 +320,6 @@ public class ChunkManager : MonoBehaviour
         {
             chunks.Add(chunk);
         }
-    }
-
-    public static IEnumerator flushUnloadedChunks()
-    {
-        if (flushers >= MAX_FLUSHERS)
-        {
-            yield break;
-        }
-        flushers++;
-        List<Chunk> chunksCopy = new List<Chunk>(chunks);
-        foreach (Chunk chunk in chunksCopy)
-        {
-            if (!chunk.getIsLoaded())
-            {
-                setChunk(chunk);
-                chunks.Remove(chunk);
-            }
-        }
-        flushers--;
-        yield break;
     }
 
 
@@ -332,10 +346,10 @@ public class ChunkManager : MonoBehaviour
         // If Positive Axis
         if (chunkIDZ > 0)
         {
-
             ZStart = (chunkIDZ * 16);
             ZEnd = (chunkIDZ * 16) + 15;
         }
+
         if (chunkIDX > 0)
         {
             XStart = (chunkIDX * 16);
@@ -345,10 +359,10 @@ public class ChunkManager : MonoBehaviour
         // If Negative Axis
         if (chunkIDZ < 0)
         {
-
             ZStart = (chunkIDZ * 16);
             ZEnd = (chunkIDZ * 16) - 16;
         }
+
         if (chunkIDX < 0)
         {
             XStart = (chunkIDX * 16);
@@ -361,7 +375,6 @@ public class ChunkManager : MonoBehaviour
         returnArr[2] = ZEnd;
         returnArr[3] = XEnd;
         return returnArr;
-
     }
 
 
@@ -382,6 +395,7 @@ public class ChunkManager : MonoBehaviour
             Block[,,] tempChunkArr = getChunk(IDX + 1, IDZ).getChunk();
             if (tempChunkArr != null) { if (tempChunkArr[y, 0, z].getIsTransparent()) { doRender = true; } }
         }
+        //Access Neighbouring Chunks [Z AXIS]
         if (z == 0) // Want to decrement zchunk
         {
             Block[,,] tempChunkArr = getChunk(IDX, IDZ - 1).getChunk();
@@ -393,68 +407,52 @@ public class ChunkManager : MonoBehaviour
             if (tempChunkArr != null) { if (tempChunkArr[y, x, 0].getIsTransparent()) { doRender = true; } }
         }
 
+        //Transparent Block Above/Below?
         if (y > 0 && y < 254)
-        {
-            if (chunkBuffer[y + 1, x, z].getIsTransparent() || chunkBuffer[y - 1, x, z].getIsTransparent()) { doRender = true; }
-        }
-        if (x > 0)
-        {
-            if (chunkBuffer[y, x - 1, z].getIsTransparent()) { doRender = true; }
-        }
-        if (x < 15)
-        {
-            if (chunkBuffer[y, x + 1, z].getIsTransparent()) { doRender = true; }
-        }
-        if (z > 0)
-        {
-            if (chunkBuffer[y, x, z - 1].getIsTransparent()) { doRender = true; }
-        }
-        if (z < 15)
-        {
-            if (chunkBuffer[y, x, z + 1].getIsTransparent()) { doRender = true; }
-        }
+            if (chunkBuffer[y + 1, x, z].getIsTransparent() || chunkBuffer[y - 1, x, z].getIsTransparent())
+                doRender = true;
 
+        if (x > 0)
+            if (chunkBuffer[y, x - 1, z].getIsTransparent()) 
+                doRender = true; 
+
+        if (x < 15)
+            if (chunkBuffer[y, x + 1, z].getIsTransparent()) 
+                doRender = true; 
+
+        if (z > 0)
+            if (chunkBuffer[y, x, z - 1].getIsTransparent()) 
+                doRender = true; 
+
+        if (z < 15)
+            if (chunkBuffer[y, x, z + 1].getIsTransparent()) 
+                doRender = true; 
 
         //SHOULD WATER BLOCK RENDER?
         if (chunkBuffer[y, x, z].getIsLiquid())
         {
             doRender = false;
             if (y > 0 && y < 254)
-            {
-                if (chunkBuffer[y + 1, x, z].getIsTransparent() && !chunkBuffer[y + 1, x, z].getIsLiquid()) { doRender = true; }
-            }
-            if (x > 0)
-            {
-                if (chunkBuffer[y, x - 1, z].getIsTransparent() && !chunkBuffer[y, x - 1, z].getIsLiquid()) { doRender = true; }
+                if (chunkBuffer[y + 1, x, z].getIsTransparent() && !chunkBuffer[y + 1, x, z].getIsLiquid()) 
+                    doRender = true; 
 
-            }
+            if (x > 0)
+                if (chunkBuffer[y, x - 1, z].getIsTransparent() && !chunkBuffer[y, x - 1, z].getIsLiquid()) 
+                    doRender = true; 
+
             if (x < 15)
-            {
-                if (chunkBuffer[y, x + 1, z].getIsTransparent() && !chunkBuffer[y, x + 1, z].getIsLiquid()) { doRender = true; }
-            }
+                if (chunkBuffer[y, x + 1, z].getIsTransparent() && !chunkBuffer[y, x + 1, z].getIsLiquid()) 
+                    doRender = true; 
+
             if (z > 0)
-            {
-                if (chunkBuffer[y, x, z - 1].getIsTransparent() && !chunkBuffer[y, x, z - 1].getIsLiquid()) { doRender = true; }
-            }
+                if (chunkBuffer[y, x, z - 1].getIsTransparent() && !chunkBuffer[y, x, z - 1].getIsLiquid()) 
+                    doRender = true; 
             if (z < 15)
-            {
-                if (chunkBuffer[y, x, z + 1].getIsTransparent() && !chunkBuffer[y, x, z + 1].getIsLiquid()) { doRender = true; }
-            }
+                if (chunkBuffer[y, x, z + 1].getIsTransparent() && !chunkBuffer[y, x, z + 1].getIsLiquid()) 
+                    doRender = true; 
         }
+
         return doRender;
     }
 
-
-
-    // // Start is called before the first frame update
-    // void Start()
-    // {
-
-    // }
-
-    // // Update is called once per frame
-    // void Update()
-    // {
-
-    // }
 }
