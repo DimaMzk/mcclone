@@ -14,7 +14,6 @@ public class HeightMap
     private int idX;
 
     public HeightMap(float[,] heightMap, int idZ, int idX){
-        UnityEngine.Debug.Log("Instansiating NoiseMap");
         this.heightMap = heightMap;
         this.idZ = idZ;
         this.idX = idX;

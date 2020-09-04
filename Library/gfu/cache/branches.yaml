@@ -13,16 +13,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cacheType: 2
-  lastUpdatedAtString: 2020-09-03T19:25:09.201-07:00
-  initializedAtString: 2020-09-03T14:03:37.590-07:00
+  lastUpdatedAtString: 2020-09-04T12:47:13.480-07:00
+  initializedAtString: 2020-09-04T12:47:12.597-07:00
   localBranches:
   - name: fixingworldgeneration
-    tracking: 
+    tracking: origin/fixingworldgeneration
   - name: infiniteworldgeneration
     tracking: origin/infiniteworldgeneration
   - name: master
     tracking: origin/master
   remoteBranches:
+  - name: origin/fixingworldgeneration
+    tracking: '[None]'
   - name: origin/master
     tracking: '[None]'
   remotes:
@@ -41,9 +43,9 @@ MonoBehaviour:
     values:
     - name: fixingworldgeneration
       remote:
-        name: 
-        url: 
-      trackingBranch: 
+        name: origin
+        url: https://github.com/DimaMzk/mcclone.git
+      trackingBranch: fixingworldgeneration
     - name: infiniteworldgeneration
       remote:
         name: origin
@@ -59,9 +61,15 @@ MonoBehaviour:
     - origin
     subKeys:
     - Values:
+      - fixingworldgeneration
       - master
     subKeyValues:
     - Values:
+      - name: fixingworldgeneration
+        remote:
+          name: origin
+          url: https://github.com/DimaMzk/mcclone.git
+        trackingBranch: 
       - name: master
         remote:
           name: origin

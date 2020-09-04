@@ -27,9 +27,6 @@ public class arraytoterraintest : MonoBehaviour
     private static System.Random SEED_GENERATOR = new System.Random();
     public static int SEED = SEED_GENERATOR.Next(999999);
     public int RENDERDISTANCE;
-
-    // Test Code
-
     public static List<HeightMap> heightMaps = new List<HeightMap>();
 
 
@@ -60,10 +57,8 @@ public class arraytoterraintest : MonoBehaviour
         currentZchunk = zchunk;
         renderRadius(xchunk, zchunk, RENDERDISTANCE);
 
-        //Test Code
         float[,] tempN = Noise.GenerateNoiseMap(3200, 3200, SEED, 500, 1, .1f, 1.0f, new Vector2(0, 0));
         heightMaps.Add(new HeightMap(tempN, 0, 0));
-        UnityEngine.Debug.Log("Added Heightmap to list");
     }
 
     //Update is called once per frame
@@ -146,7 +141,7 @@ public class arraytoterraintest : MonoBehaviour
 
         // Need to generate heightmap for chunk area
 
-        float[,] noise = getHeightMap(new HeightMap(null, XStart/3200, ZStart/3200)).getHeightMap();
+        float[,] noise = getHeightMap(new HeightMap(null,XStart/3200, ZStart/3200)).getHeightMap();
         // Need to generate Treemap AND Bushmap
 
         int[,] treeMap = new int[48, 48];
@@ -392,6 +387,11 @@ public class arraytoterraintest : MonoBehaviour
             }
         }
 
+        int subValX = (XStart/3200) * 3200;
+        if(XStart < 0) subValX = ((XStart/3200) - 1) * 3200;
+        int subValZ = (ZStart/3200) * 3200;
+        if(ZStart < 0) subValZ = ((ZStart/3200) - 1) * 3200;
+
         int XS = XStart;
 
         // Create a chunk
@@ -413,8 +413,9 @@ public class arraytoterraintest : MonoBehaviour
             {
                 // Noise map effect range of y: 35 - 150
                 int deferAir = 0;
-                int subValX = (XStart/3200) * 3200;
-                int subValZ = (ZStart/3200) * 3200;
+
+                
+
                 float yTop = (noise[(x + XStart) - subValX, (z + ZStart) - subValZ] * 115) + 35;
                 int ytopInt = (int)Math.Floor(yTop);
 

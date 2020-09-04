@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cacheType: 1
-  lastUpdatedAtString: 2020-09-03T19:25:05.591-07:00
-  initializedAtString: 2020-09-03T14:03:35.248-07:00
+  lastUpdatedAtString: 2020-09-04T13:24:39.324-07:00
+  initializedAtString: 2020-09-04T13:24:39.324-07:00
   currentGitRemote:
     name: origin
     url: https://github.com/DimaMzk/mcclone.git
@@ -25,13 +25,13 @@ MonoBehaviour:
     token: 
   currentGitBranch:
     name: fixingworldgeneration
-    tracking: 
+    tracking: origin/fixingworldgeneration
   currentConfigBranch:
     name: fixingworldgeneration
     remote:
-      name: 
-      url: 
-    trackingBranch: 
+      name: origin
+      url: https://github.com/DimaMzk/mcclone.git
+    trackingBranch: fixingworldgeneration
   currentConfigRemote:
     name: origin
     url: https://github.com/DimaMzk/mcclone.git
