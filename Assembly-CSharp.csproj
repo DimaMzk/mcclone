@@ -46,6 +46,7 @@
      <Compile Include="Assets\#Scripts\ChunkManager.cs" />
      <Compile Include="Assets\#Scripts\Block.cs" />
      <Compile Include="Assets\#Scripts\IsVisible.cs" />
+     <Compile Include="Assets\#Scripts\HeightMap.cs" />
      <None Include="Assets\FirstPersion AIO Pack\README.txt" />
      <None Include="Assets\JsonDotNet\link.xml" />
     <Reference Include="UnityEngine">
