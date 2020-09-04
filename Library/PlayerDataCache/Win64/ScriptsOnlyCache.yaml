@@ -5,10 +5,15 @@ ScriptsOnlyBuild:
     - FirstPersonAIO
     - arraytoterraintest
     - cubeUVMapping
+    GitHub.Unity.45.dll:
+    - GitHub.Unity.ApplicationCache
+    - GitHub.Unity.EnvironmentCache
+    - GitHub.Unity.GitAheadBehindCache
+    - GitHub.Unity.GitLocksCache
+    - GitHub.Unity.GitStatusCache
+    - GitHub.Unity.RepositoryInfoCache
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
-    Unity.Timeline.Editor.dll:
-    - TimelineProjectSettings
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
@@ -51,19 +56,19 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 12222}
+      Script: {instanceID: 12258}
     - Class: 114
-      Script: {instanceID: 12502}
+      Script: {instanceID: 12548}
     - Class: 114
-      Script: {instanceID: 12506}
+      Script: {instanceID: 12552}
     - Class: 114
-      Script: {instanceID: 12628}
+      Script: {instanceID: 12676}
     - Class: 114
-      Script: {instanceID: 13164}
+      Script: {instanceID: 13304}
     - Class: 114
-      Script: {instanceID: 14008}
+      Script: {instanceID: 14166}
     - Class: 114
-      Script: {instanceID: 14834}
+      Script: {instanceID: 14884}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 124
@@ -640,4 +645,4 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/DMaiz/UnityBuilds/MCClone/0.4.6/Minecraft Clone.exe
+  playerPath: C:/Users/DMaiz/UnityBuilds/MCClone/0.4.6-1 (8 RD)/Minecraft Clone.exe

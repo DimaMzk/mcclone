@@ -1,0 +1,390 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 61
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 995438498, guid: 68c7e4565cde54155bb78d8e935f1ddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cacheType: 6
+  lastUpdatedAtString: 2020-09-04T13:24:44.907-07:00
+  initializedAtString: 2020-09-04T13:24:44.907-07:00
+  entries:
+  - path: Assets\#Scripts\arraytoterraintest.cs
+    fullPath: C:\Users\DMaiz\Github\mcclone\Assets\#Scripts\arraytoterraintest.cs
+    projectPath: Assets\#Scripts\arraytoterraintest.cs
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Assets\#Scripts\HeightMap.cs
+    fullPath: C:\Users\DMaiz\Github\mcclone\Assets\#Scripts\HeightMap.cs
+    projectPath: Assets\#Scripts\HeightMap.cs
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Assets\#Scripts\Noise.cs
+    fullPath: C:\Users\DMaiz\Github\mcclone\Assets\#Scripts\Noise.cs
+    projectPath: Assets\#Scripts\Noise.cs
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\ArtifactDB
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\ArtifactDB
+    projectPath: Library\ArtifactDB
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\Artifacts\07\0707da25c3a1d0a68692b15ac6fa2aa6
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\07\0707da25c3a1d0a68692b15ac6fa2aa6
+    projectPath: Library\Artifacts\07\0707da25c3a1d0a68692b15ac6fa2aa6
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\0d\0d7cb0dbd0a0cbd83a3fcee952c9f3e2
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\0d\0d7cb0dbd0a0cbd83a3fcee952c9f3e2
+    projectPath: Library\Artifacts\0d\0d7cb0dbd0a0cbd83a3fcee952c9f3e2
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\1a\1a57bb99dec1a84b08bc0f81bd1dfcda
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\1a\1a57bb99dec1a84b08bc0f81bd1dfcda
+    projectPath: Library\Artifacts\1a\1a57bb99dec1a84b08bc0f81bd1dfcda
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\20\200178ab23436c32af0e1ef1dee6a415
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\20\200178ab23436c32af0e1ef1dee6a415
+    projectPath: Library\Artifacts\20\200178ab23436c32af0e1ef1dee6a415
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\26\268b07affdbd87fd2fcc37ec42fba6be
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\26\268b07affdbd87fd2fcc37ec42fba6be
+    projectPath: Library\Artifacts\26\268b07affdbd87fd2fcc37ec42fba6be
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\33\3368d0e4b298bca64f0984047a50710b
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\33\3368d0e4b298bca64f0984047a50710b
+    projectPath: Library\Artifacts\33\3368d0e4b298bca64f0984047a50710b
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\3a\3a5aaca3d4ad0d9ce1551996be1e4af1
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\3a\3a5aaca3d4ad0d9ce1551996be1e4af1
+    projectPath: Library\Artifacts\3a\3a5aaca3d4ad0d9ce1551996be1e4af1
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\52\5245837dde8b182d14772038fa8a6587
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\52\5245837dde8b182d14772038fa8a6587
+    projectPath: Library\Artifacts\52\5245837dde8b182d14772038fa8a6587
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\54\54711c5e06e125a4579cf64a0d64a114
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\54\54711c5e06e125a4579cf64a0d64a114
+    projectPath: Library\Artifacts\54\54711c5e06e125a4579cf64a0d64a114
+    originalPath: 
+    indexStatus: 1
+    workTreeStatus: 1
+  - path: Library\Artifacts\55\55ed4b1da749d387ec20d0f688e1fdbf
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\55\55ed4b1da749d387ec20d0f688e1fdbf
+    projectPath: Library\Artifacts\55\55ed4b1da749d387ec20d0f688e1fdbf
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\60\6014f00f7e74da267f006a8ae7ca9540
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\60\6014f00f7e74da267f006a8ae7ca9540
+    projectPath: Library\Artifacts\60\6014f00f7e74da267f006a8ae7ca9540
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\60\60d3da36dce9003e01c1c3cf48be78a2
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\60\60d3da36dce9003e01c1c3cf48be78a2
+    projectPath: Library\Artifacts\60\60d3da36dce9003e01c1c3cf48be78a2
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\64\64b76e2b5d544133d53cd34552971cba
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\64\64b76e2b5d544133d53cd34552971cba
+    projectPath: Library\Artifacts\64\64b76e2b5d544133d53cd34552971cba
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\6e\6eb85694a0978dc86720ba0e9d780ca4
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\6e\6eb85694a0978dc86720ba0e9d780ca4
+    projectPath: Library\Artifacts\6e\6eb85694a0978dc86720ba0e9d780ca4
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\77\773edfe2ecea61118f9f29266f222fd1
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\77\773edfe2ecea61118f9f29266f222fd1
+    projectPath: Library\Artifacts\77\773edfe2ecea61118f9f29266f222fd1
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\78\7809f00d3d4d92ca11c95fad5957211c
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\78\7809f00d3d4d92ca11c95fad5957211c
+    projectPath: Library\Artifacts\78\7809f00d3d4d92ca11c95fad5957211c
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\7a\7a49ab716da28481e52b57a8d6d1c075
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\7a\7a49ab716da28481e52b57a8d6d1c075
+    projectPath: Library\Artifacts\7a\7a49ab716da28481e52b57a8d6d1c075
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\7e\7e393fd4e87d89929f2dab75637bc6c8
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\7e\7e393fd4e87d89929f2dab75637bc6c8
+    projectPath: Library\Artifacts\7e\7e393fd4e87d89929f2dab75637bc6c8
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\81\819cc02ecde4c3fee43ef70a08cfd665
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\81\819cc02ecde4c3fee43ef70a08cfd665
+    projectPath: Library\Artifacts\81\819cc02ecde4c3fee43ef70a08cfd665
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\8b\8b0af1b5ea653fb838daf5eddb2cfefa
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\8b\8b0af1b5ea653fb838daf5eddb2cfefa
+    projectPath: Library\Artifacts\8b\8b0af1b5ea653fb838daf5eddb2cfefa
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\8d\8d6b0be8e96290d818b917b454e60ea4
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\8d\8d6b0be8e96290d818b917b454e60ea4
+    projectPath: Library\Artifacts\8d\8d6b0be8e96290d818b917b454e60ea4
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\98\982228cd8b7b5939182577c78fb92c92
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\98\982228cd8b7b5939182577c78fb92c92
+    projectPath: Library\Artifacts\98\982228cd8b7b5939182577c78fb92c92
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\a2\a24aaa764209660c0aa5eeff7286e6ef
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\a2\a24aaa764209660c0aa5eeff7286e6ef
+    projectPath: Library\Artifacts\a2\a24aaa764209660c0aa5eeff7286e6ef
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\a6\a6db10334b6c0aaddeca9176e974c7bf
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\a6\a6db10334b6c0aaddeca9176e974c7bf
+    projectPath: Library\Artifacts\a6\a6db10334b6c0aaddeca9176e974c7bf
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\aa\aadb48c7eda7d66173098a407de62bdf
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\aa\aadb48c7eda7d66173098a407de62bdf
+    projectPath: Library\Artifacts\aa\aadb48c7eda7d66173098a407de62bdf
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\ba\bae7eb89bec169ea4ef91a00f4a0fc9b
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\ba\bae7eb89bec169ea4ef91a00f4a0fc9b
+    projectPath: Library\Artifacts\ba\bae7eb89bec169ea4ef91a00f4a0fc9b
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\bf\bfafdca41d5953986ec2d98282e3e22d
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\bf\bfafdca41d5953986ec2d98282e3e22d
+    projectPath: Library\Artifacts\bf\bfafdca41d5953986ec2d98282e3e22d
+    originalPath: 
+    indexStatus: 1
+    workTreeStatus: 1
+  - path: Library\Artifacts\c0\c0b6ec2d9ef748abc3b21c2b26f19d58
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\c0\c0b6ec2d9ef748abc3b21c2b26f19d58
+    projectPath: Library\Artifacts\c0\c0b6ec2d9ef748abc3b21c2b26f19d58
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\c4\c4d90fc5a78a0e8384ca643c70e25ee5
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\c4\c4d90fc5a78a0e8384ca643c70e25ee5
+    projectPath: Library\Artifacts\c4\c4d90fc5a78a0e8384ca643c70e25ee5
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\c9\c99dc015a0b7ab7b05041adce5144bff
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\c9\c99dc015a0b7ab7b05041adce5144bff
+    projectPath: Library\Artifacts\c9\c99dc015a0b7ab7b05041adce5144bff
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\d2\d2de8c37afa1092b29c601c405efee8e
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\d2\d2de8c37afa1092b29c601c405efee8e
+    projectPath: Library\Artifacts\d2\d2de8c37afa1092b29c601c405efee8e
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\dc\dce7f76bd64ad5a174a44b6cb3b055ba
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\dc\dce7f76bd64ad5a174a44b6cb3b055ba
+    projectPath: Library\Artifacts\dc\dce7f76bd64ad5a174a44b6cb3b055ba
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\de\ded92555f924174218b152a563346233
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\de\ded92555f924174218b152a563346233
+    projectPath: Library\Artifacts\de\ded92555f924174218b152a563346233
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\eb\ebfd6ab833f2b4f8b799d20867cce558
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\eb\ebfd6ab833f2b4f8b799d20867cce558
+    projectPath: Library\Artifacts\eb\ebfd6ab833f2b4f8b799d20867cce558
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\Artifacts\f2\f2cefd59e611b8208534321abaeb23d5
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\Artifacts\f2\f2cefd59e611b8208534321abaeb23d5
+    projectPath: Library\Artifacts\f2\f2cefd59e611b8208534321abaeb23d5
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 5
+  - path: Library\CurrentLayout-default.dwlt
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\CurrentLayout-default.dwlt
+    projectPath: Library\CurrentLayout-default.dwlt
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\EditorInstance.json
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\EditorInstance.json
+    projectPath: Library\EditorInstance.json
+    originalPath: 
+    indexStatus: 1
+    workTreeStatus: 1
+  - path: Library\EditorUserBuildSettings.asset
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\EditorUserBuildSettings.asset
+    projectPath: Library\EditorUserBuildSettings.asset
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\expandedItems
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\expandedItems
+    projectPath: Library\expandedItems
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\gfu\cache\branches.yaml
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\gfu\cache\branches.yaml
+    projectPath: Library\gfu\cache\branches.yaml
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\gfu\cache\gitlocks.yaml
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\gfu\cache\gitlocks.yaml
+    projectPath: Library\gfu\cache\gitlocks.yaml
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\gfu\cache\gitstatusentries.yaml
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\gfu\cache\gitstatusentries.yaml
+    projectPath: Library\gfu\cache\gitstatusentries.yaml
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\gfu\cache\gittrackingstatus.yaml
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\gfu\cache\gittrackingstatus.yaml
+    projectPath: Library\gfu\cache\gittrackingstatus.yaml
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\gfu\cache\repoinfo.yaml
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\gfu\cache\repoinfo.yaml
+    projectPath: Library\gfu\cache\repoinfo.yaml
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\LastBuild.buildreport
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\LastBuild.buildreport
+    projectPath: Library\LastBuild.buildreport
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\PlayerDataCache\Win64\Data\boot.config
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\PlayerDataCache\Win64\Data\boot.config
+    projectPath: Library\PlayerDataCache\Win64\Data\boot.config
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\PlayerDataCache\Win64\Data\globalgamemanagers
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\PlayerDataCache\Win64\Data\globalgamemanagers
+    projectPath: Library\PlayerDataCache\Win64\Data\globalgamemanagers
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\PlayerDataCache\Win64\Data\globalgamemanagers.assets
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\PlayerDataCache\Win64\Data\globalgamemanagers.assets
+    projectPath: Library\PlayerDataCache\Win64\Data\globalgamemanagers.assets
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\PlayerDataCache\Win64\Data\level0
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\PlayerDataCache\Win64\Data\level0
+    projectPath: Library\PlayerDataCache\Win64\Data\level0
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\PlayerDataCache\Win64\Data\Managed\Assembly-CSharp.dll
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\PlayerDataCache\Win64\Data\Managed\Assembly-CSharp.dll
+    projectPath: Library\PlayerDataCache\Win64\Data\Managed\Assembly-CSharp.dll
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\PlayerDataCache\Win64\ScriptsOnlyCache.yaml
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\PlayerDataCache\Win64\ScriptsOnlyCache.yaml
+    projectPath: Library\PlayerDataCache\Win64\ScriptsOnlyCache.yaml
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\SceneVisibilityState.asset
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\SceneVisibilityState.asset
+    projectPath: Library\SceneVisibilityState.asset
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\ScriptAssemblies\Assembly-CSharp.dll
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\ScriptAssemblies\Assembly-CSharp.dll
+    projectPath: Library\ScriptAssemblies\Assembly-CSharp.dll
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\ScriptAssemblies\Assembly-CSharp.pdb
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\ScriptAssemblies\Assembly-CSharp.pdb
+    projectPath: Library\ScriptAssemblies\Assembly-CSharp.pdb
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\ShaderCache\EditorEncounteredVariants
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\ShaderCache\EditorEncounteredVariants
+    projectPath: Library\ShaderCache\EditorEncounteredVariants
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Library\SourceAssetDB
+    fullPath: C:\Users\DMaiz\Github\mcclone\Library\SourceAssetDB
+    projectPath: Library\SourceAssetDB
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: ProjectSettings\ProjectSettings.asset
+    fullPath: C:\Users\DMaiz\Github\mcclone\ProjectSettings\ProjectSettings.asset
+    projectPath: ProjectSettings\ProjectSettings.asset
+    originalPath: 
+    indexStatus: 0
+    workTreeStatus: 3
+  - path: Temp\UnityLockfile
+    fullPath: C:\Users\DMaiz\Github\mcclone\Temp\UnityLockfile
+    projectPath: Temp\UnityLockfile
+    originalPath: 
+    indexStatus: 1
+    workTreeStatus: 1
